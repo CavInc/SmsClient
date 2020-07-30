@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DataManager mDataManager;
     private DrawerLayout mNavigationDrawer;
     private NavigationView navigationView;
+    private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void setupToolbar(){
-        ActionBar actionBar = getSupportActionBar();
+        actionBar = getSupportActionBar();
         if (actionBar!=null){
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -93,26 +94,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.main_tr:
                 viewFragment(new MainFragment(),"MAIN");
                 navigationView.setCheckedItem(R.id.main_tr);
+                actionBar.setTitle("Оправка СМС");
                 break;
             case R.id.message_tr:
                 viewFragment(new MessageTxtFragment(),"MESSAGE");
                 navigationView.setCheckedItem(R.id.message_tr);
+                actionBar.setTitle("Сообщения");
                 break;
             case R.id.short_msg_tr:
                 viewFragment(new ShortMsgTxtFragment(),"SHORT");
                 navigationView.setCheckedItem(R.id.short_msg_tr);
+                actionBar.setTitle("Шорткаты");
                 break;
             case R.id.history_tr:
                 viewFragment(new HistoryFragment(),"HISTORY");
                 navigationView.setCheckedItem(R.id.history_tr);
+                actionBar.setTitle("История сообщений");
                 break;
             case R.id.setting_tr:
                 viewFragment(new SettingFragment(),"SETTING");
                 navigationView.setCheckedItem(R.id.setting_tr);
+                actionBar.setTitle("Настройки");
                 break;
             case R.id.phone_tr:
                 viewFragment(new PhoneListFragment(),"PHONE");
                 navigationView.setCheckedItem(R.id.phone_tr);
+                actionBar.setTitle("Телефоны");
                 break;
         }
         mNavigationDrawer.closeDrawer(GravityCompat.START);

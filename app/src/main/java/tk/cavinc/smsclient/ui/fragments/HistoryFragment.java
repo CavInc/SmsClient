@@ -67,7 +67,7 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.history_delete:
-                mDataManager.getDB().deleteAllQuery();
+                mDataManager.getDB().deleteHistory();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

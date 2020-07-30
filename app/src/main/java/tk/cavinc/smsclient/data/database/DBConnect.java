@@ -213,6 +213,13 @@ public class DBConnect {
         return cursor;
     }
 
+    // удаляем историю
+    public void deleteHistory(){
+        open();
+        database.delete(DBHelper.HISTORY_SEND,null,null);
+        close();
+    }
+
 
     // Добавить запись в очередь
     public void addQuery(int idPhone){

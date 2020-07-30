@@ -25,6 +25,7 @@ import static android.content.ContentValues.TAG;
  */
 
 public class SenserSmsService extends Service {
+    private static final int DEFAULT_NOTIFICATION_ID = 453;
     private final SmsManager smsManager;
     private DataManager mDataManager;
     private boolean runing = true;
@@ -112,7 +113,7 @@ public class SenserSmsService extends Service {
         }else{
             notification = builder.build();
         }
-        //startForeground(DEFAULT_NOTIFICATION_ID, notification);
+        startForeground(DEFAULT_NOTIFICATION_ID, notification);
     }
 
     // получаем телефон
