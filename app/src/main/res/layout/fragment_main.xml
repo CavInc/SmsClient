@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/main_start"
+        android:text="Старт"
+        android:background="@drawable/button_bg"
+        android:textColor="@color/app_black"
+        android:textStyle="bold"
+        android:onClick="onStartService"
+        android:layout_above="@+id/main_pause"
+        android:layout_marginBottom="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/main_pause"
+        android:text="Пауза"
+        android:background="@drawable/button_bg"
+        android:textColor="@color/app_black"
+        android:textStyle="bold"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/main_stop"
+        android:layout_marginTop="24dp"
+        android:onClick="onStopService"
+        android:background="@drawable/button_bg"
+        android:textColor="@color/app_black"
+        android:textStyle="bold"
+        android:text="Стоп"
+        android:layout_below="@+id/main_pause"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

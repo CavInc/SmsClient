@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="Основные настроки">
+        <Preference
+            android:key="time_period"
+            android:title="Временной диапазон"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Отправка сообщений">
+        <CheckBoxPreference
+            android:key="msg_rand"
+            android:title="Сообщения по порядку"/>
+    </PreferenceCategory>
+    <PreferenceCategory>
+
+    </PreferenceCategory>
+</PreferenceScreen>

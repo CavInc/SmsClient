@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:icon="@drawable/ic_home_black_24dp"
+            android:id="@+id/main_tr"
+            android:title="Главная"/>
+        <item
+            android:icon="@drawable/ic_message_black_24dp"
+            android:id="@+id/message_tr"
+            android:title="Сообщения"/>
+        <item
+            android:icon="@drawable/ic_mms_black_24dp"
+            android:id="@+id/short_msg_tr"
+            android:title="Шорткаты"/>
+        <item
+            android:icon="@drawable/ic_call_black_24dp"
+            android:id="@+id/phone_tr"
+            android:title="Телефоны"/>
+        <item
+            android:icon="@drawable/ic_info_outline_black_24dp"
+            android:id="@+id/history_tr"
+            android:title="История"/>
+        <item
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:id="@+id/setting_tr"
+            android:title="Настройки"/>
+    </group>
+</menu>

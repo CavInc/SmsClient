@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">SmsClient</string>
+    <string name="dialog_close">Закрыть</string>
+    <string name="dialog_ok">Да</string>
+    <string name="dialog_store">Сохранить</string>
+</resources>
