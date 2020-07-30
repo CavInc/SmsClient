@@ -71,6 +71,13 @@ public class DBConnect {
         close();
     }
 
+    // удаляем сообщение
+    public void deleteMessage(int id){
+        open();
+        database.delete(DBHelper.MSG,"id="+id,null);
+        close();
+    }
+
     // получаем сообщение по номеру
     public SmsMessageModel getMessagesId(int id){
         SmsMessageModel data = null;

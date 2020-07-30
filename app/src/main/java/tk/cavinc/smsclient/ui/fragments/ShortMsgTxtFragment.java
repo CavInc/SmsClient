@@ -112,6 +112,7 @@ public class ShortMsgTxtFragment extends Fragment implements View.OnClickListene
                 break;
             case R.id.del_laout:
                 mDataManager.getDB().deleteShortCupId(selectRecord.getId());
+                updateUI();
                 break;
         }
     }

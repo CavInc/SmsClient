@@ -85,11 +85,15 @@ public class SenserSmsService extends Service {
                     SmsMessageModel msg = mDataManager.getDB().getMessagesId(idMsg);
                     Log.d(TAG, msg.getMsg());
 
+
                     String phone = "5556";//+15555215556
 
                     phone = getPhone();
 
-                    //smsManager.sendTextMessage(phone, null, msg.getMsg(), null, null);
+
+                    //String phone = getPhone();
+
+                    smsManager.sendTextMessage(phone, null, msg.getMsg(), null, null);
 
                     mDataManager.getDB().addHistory(phone,msg.getMsg());
                 }

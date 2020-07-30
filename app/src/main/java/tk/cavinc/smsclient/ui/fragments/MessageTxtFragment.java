@@ -18,13 +18,15 @@ import tk.cavinc.smsclient.data.managers.DataManager;
 import tk.cavinc.smsclient.data.models.SmsMessageModel;
 import tk.cavinc.smsclient.ui.adapters.MessageAdapter;
 import tk.cavinc.smsclient.ui.dialogs.AddEditMessageDialog;
+import tk.cavinc.smsclient.ui.dialogs.EditDeleteDialog;
 
 /**
  * Created by cav on 25.07.20.
  */
 
 public class MessageTxtFragment extends Fragment implements View.OnClickListener,
-        AddEditMessageDialog.AddEditMessageDialogListener,AdapterView.OnItemLongClickListener {
+        AddEditMessageDialog.AddEditMessageDialogListener,AdapterView.OnItemLongClickListener,
+        EditDeleteDialog.SelectEditDeleteListener{
     private static final int NEW_MSG = 0;
     private static final int EDIT_MSG = 1;
     private DataManager mDataManager;
@@ -93,11 +95,26 @@ public class MessageTxtFragment extends Fragment implements View.OnClickListener
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
         selectRecord = (SmsMessageModel) adapterView.getItemAtPosition(position);
 
-        mode = EDIT_MSG;
-        AddEditMessageDialog dialog = AddEditMessageDialog.newInstance(selectRecord.getMsg());
-        dialog.setListener(this);
-        dialog.show(getFragmentManager(),"UEM");
+        EditDeleteDialog deleteDialog = new EditDeleteDialog();
+        deleteDialog.setSelectEditDeleteListener(this);
+        deleteDialog.show(getFragmentManager(),"ED");
 
         return true;
+    }
+
+    @Override
+    public void selectItem(int id) {
+        switch (id) {
+            case R.id.edit_laout:
+                mode = EDIT_MSG;
+                AddEditMessageDialog dialog = AddEditMessageDialog.newInstance(selectRecord.getMsg());
+                dialog.setListener(this);
+                dialog.show(getFragmentManager(),"UEM");
+                break;
+            case R.id.del_laout:
+                mDataManager.getDB().deleteMessage(selectRecord.getId());
+                updateUI();
+                break;
+        }
     }
 }
