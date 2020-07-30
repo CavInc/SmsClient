@@ -55,14 +55,31 @@ public class SenserSmsService extends Service {
             @Override
             public void run() {
                 while (runing) {
+                    int minDelay = mDataManager.getPrefManager().getPeriodFrom();
+                    int maxDelay = mDataManager.getPrefManager().getPeriodTo();
+
+                    int delay = Utils.getRandItem(minDelay,maxDelay);
+
                     try {
                         TimeUnit.SECONDS.sleep(30);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     int count = mDataManager.getDB().getCountMsg();
-                    int idMsg = Utils.getRandItem(count-1);
-                    if (idMsg == 0) idMsg = 1;
+                    int idMsg = 0;
+
+                    if (!mDataManager.getPrefManager().getMsgRnd()) {
+                        idMsg = Utils.getRandItem(count - 1);
+                        if (idMsg == 0) idMsg = 1;
+                    } else {
+                        idMsg = mDataManager.getPrefManager().getLastSendMessage();
+                        idMsg +=1;
+                        if (idMsg > count) {
+                            idMsg = 1;
+                        }
+                        mDataManager.getPrefManager().setLastSendMsg(idMsg);
+                    }
+
                     Log.d(TAG,"ID "+idMsg);
 
                     SmsMessageModel msg = mDataManager.getDB().getMessagesId(idMsg);

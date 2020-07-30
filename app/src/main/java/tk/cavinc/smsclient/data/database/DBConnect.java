@@ -141,6 +141,22 @@ public class DBConnect {
         return data;
     }
 
+    // удаляем шорткат
+    public void deleteShortCupId(int id){
+        open();
+        database.delete(DBHelper.SHORTCUT_MSG,"id="+id,null);
+        close();
+    }
+
+    // обновляем шорткат
+    public void updateShortCut(ShortCutMsgModel record){
+        open();
+        ContentValues values = new ContentValues();
+        values.put("msg",record.getMsg());
+        database.update(DBHelper.SHORTCUT_MSG,values,"id="+record.getId(),null);
+        close();
+    }
+
     // получаем номера телефонов
     public ArrayList<PhoneListModel> getPhone(){
         ArrayList<PhoneListModel> rec = new ArrayList<>();

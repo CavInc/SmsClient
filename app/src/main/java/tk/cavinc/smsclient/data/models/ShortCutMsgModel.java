@@ -20,4 +20,8 @@ public class ShortCutMsgModel {
     public String getMsg() {
         return mMsg;
     }
+
+    public void setMsg(String msg) {
+        mMsg = msg;
+    }
 }

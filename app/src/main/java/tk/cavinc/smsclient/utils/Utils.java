@@ -27,4 +27,10 @@ public class Utils {
     public static int getRandItem(int maxID){
         return (int) (Math.random() * ++maxID) + 1;
     }
+
+    // получаем радномное число из диапазона
+    public static int getRandItem(int minId, int maxId) {
+        maxId -= minId;
+        return (int) (Math.random() * ++maxId) + minId;
+    }
 }

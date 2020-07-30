@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -16,16 +17,24 @@ import tk.cavinc.smsclient.data.models.ShortCutMsgModel;
 import tk.cavinc.smsclient.ui.adapters.MessageAdapter;
 import tk.cavinc.smsclient.ui.adapters.ShortMsgAdapter;
 import tk.cavinc.smsclient.ui.dialogs.AddEditMessageDialog;
+import tk.cavinc.smsclient.ui.dialogs.EditDeleteDialog;
 
 /**
  * Created by cav on 25.07.20.
  */
 
 public class ShortMsgTxtFragment extends Fragment implements View.OnClickListener,
-        AddEditMessageDialog.AddEditMessageDialogListener {
+        AddEditMessageDialog.AddEditMessageDialogListener,AdapterView.OnItemLongClickListener,
+        EditDeleteDialog.SelectEditDeleteListener {
+
+    private static final int NEW_MSG = 0;
+    private static final int EDIT_MSG = 1;
+
     private DataManager mDataManager;
     private ListView mListView;
     private ShortMsgAdapter mAdapter;
+    private ShortCutMsgModel selectRecord;
+    private int mode;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,6 +48,7 @@ public class ShortMsgTxtFragment extends Fragment implements View.OnClickListene
         View rootView = inflater.inflate(R.layout.fragment_message_txt, container, false);
 
         mListView = rootView.findViewById(R.id.msg_lv);
+        mListView.setOnItemLongClickListener(this);
 
         rootView.findViewById(R.id.fab).setOnClickListener(this);
 
@@ -47,6 +57,7 @@ public class ShortMsgTxtFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
+        mode = NEW_MSG;
         AddEditMessageDialog dialog = new AddEditMessageDialog();
         dialog.setListener(this);
         dialog.show(getFragmentManager(),"AEM");
@@ -54,7 +65,12 @@ public class ShortMsgTxtFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onChange(String msg) {
-        mDataManager.getDB().addShortCut(msg);
+        if (mode == NEW_MSG) {
+            mDataManager.getDB().addShortCut(msg);
+        } else {
+            selectRecord.setMsg(msg);
+            mDataManager.getDB().updateShortCut(selectRecord);
+        }
         updateUI();
     }
 
@@ -71,6 +87,32 @@ public class ShortMsgTxtFragment extends Fragment implements View.OnClickListene
             mListView.setAdapter(mAdapter);
         } else {
             mAdapter.setData(data);
+        }
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        selectRecord = (ShortCutMsgModel) parent.getItemAtPosition(position);
+
+        EditDeleteDialog deleteDialog = new EditDeleteDialog();
+        deleteDialog.setSelectEditDeleteListener(this);
+        deleteDialog.show(getFragmentManager(),"ED");
+
+        return false;
+    }
+
+    @Override
+    public void selectItem(int id) {
+        switch (id) {
+            case R.id.edit_laout:
+                mode = EDIT_MSG;
+                AddEditMessageDialog dialog = AddEditMessageDialog.newInstance(selectRecord.getMsg());
+                dialog.setListener(this);
+                dialog.show(getFragmentManager(),"UEM");
+                break;
+            case R.id.del_laout:
+                mDataManager.getDB().deleteShortCupId(selectRecord.getId());
+                break;
         }
     }
 }
