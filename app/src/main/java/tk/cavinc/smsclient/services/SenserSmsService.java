@@ -1,9 +1,13 @@
 package tk.cavinc.smsclient.services;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -26,6 +30,7 @@ import static android.content.ContentValues.TAG;
 
 public class SenserSmsService extends Service {
     private static final int DEFAULT_NOTIFICATION_ID = 453;
+    private static final String CHANEL_ID = "tk.cavinc.SMSCLIENT";
     private final SmsManager smsManager;
     private DataManager mDataManager;
     private boolean runing = true;
@@ -93,7 +98,7 @@ public class SenserSmsService extends Service {
 
                     //String phone = getPhone();
 
-                    smsManager.sendTextMessage(phone, null, msg.getMsg(), null, null);
+                    //smsManager.sendTextMessage(phone, null, msg.getMsg(), null, null);
 
                     mDataManager.getDB().addHistory(phone,msg.getMsg());
                 }
@@ -118,7 +123,26 @@ public class SenserSmsService extends Service {
                 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        NotificationManager notificationManager = (NotificationManager) mDataManager.getContext()
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+        //для А8+
+        if (Build.VERSION.SDK_INT >= 26) {
+            NotificationChannel channel = new NotificationChannel(CHANEL_ID,"Reminder", NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription("Reminder");
+            channel.enableLights(true);
+            channel.enableVibration(true);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+
+        Notification.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            builder = new Notification.Builder(this,CHANEL_ID);
+        } else {
+            builder = new Notification.Builder(this);
+        }
+
+        //NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setContentIntent(contentIntent)
                 .setOngoing(true)   //Can't be swiped out
                 //.setSmallIcon(R.drawable.ic_access_point_network)

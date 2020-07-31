@@ -152,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /*
     // запуск сервиса
     public void onStartService(View v){
         //mDataManager.getDB().deleteAllQuery();
@@ -170,5 +171,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = new Intent(this,SenserSmsService.class);
         stopService(intent);
     }
+    */
 
 }

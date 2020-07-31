@@ -6,4 +6,5 @@
 
     <!-- app color -->
     <color name="app_black">#280fca</color>
+    <color name="app_blue_ligth">#d6d5d0f7</color>
 </resources>

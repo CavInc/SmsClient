@@ -7,7 +7,7 @@
     <selector>
         <item android:state_enabled="false">
             <shape android:shape="rectangle">
-                <solid android:color="@android:color/darker_gray"/>
+                <solid android:color="@color/app_blue_ligth"/>
                 <stroke android:color="@color/app_black"
                         android:width="2dp"/>
                 <corners android:radius="4dp"/>

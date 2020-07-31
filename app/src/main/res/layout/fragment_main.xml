@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:paddingLeft="16dp"
-              android:paddingRight="16dp"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="tk.cavinc.smsclient.ui.fragments.MainFragment">
 
     <Button
         android:id="@+id/main_start"
@@ -11,7 +13,6 @@
         android:background="@drawable/button_bg"
         android:textColor="@color/app_black"
         android:textStyle="bold"
-        android:onClick="onStartService"
         android:layout_above="@+id/main_pause"
         android:layout_marginBottom="24dp"
         android:layout_width="match_parent"
@@ -28,7 +29,6 @@
     <Button
         android:id="@+id/main_stop"
         android:layout_marginTop="24dp"
-        android:onClick="onStopService"
         android:background="@drawable/button_bg"
         android:textColor="@color/app_black"
         android:textStyle="bold"
