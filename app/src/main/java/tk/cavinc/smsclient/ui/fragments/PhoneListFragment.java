@@ -30,6 +30,7 @@ import tk.cavinc.smsclient.R;
 import tk.cavinc.smsclient.data.managers.DataManager;
 import tk.cavinc.smsclient.data.models.PhoneListModel;
 import tk.cavinc.smsclient.ui.adapters.PhoneAdapter;
+import tk.cavinc.smsclient.ui.dialogs.PhoneDialog;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -37,7 +38,7 @@ import static android.app.Activity.RESULT_OK;
  * Created by cav on 26.07.20.
  */
 
-public class PhoneListFragment extends Fragment {
+public class PhoneListFragment extends Fragment implements View.OnClickListener {
 
     private static final int REQUEST_OPEN_DOCUMENT = 345;
     private static final String TAG = "PLF";
@@ -57,6 +58,8 @@ public class PhoneListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_phone_list, container, false);
+
+        rootView.findViewById(R.id.fab).setOnClickListener(this);
 
         mListView = rootView.findViewById(R.id.phone_lv);
 
@@ -184,4 +187,21 @@ public class PhoneListFragment extends Fragment {
         updateUI();
 
     }
+
+    @Override
+    public void onClick(View view) {
+        PhoneDialog dialog = new PhoneDialog();
+        dialog.setPhoneDialogListener(mPhoneDialogListener);
+        dialog.show(getFragmentManager(),"PD");
+    }
+
+    PhoneDialog.PhoneDialogListener mPhoneDialogListener = new PhoneDialog.PhoneDialogListener() {
+        @Override
+        public void onChangePhone(String phone) {
+            mDataManager.getDB().open();
+            mDataManager.getDB().addPhone(phone);
+            mDataManager.getDB().close();
+            updateUI();
+        }
+    };
 }
