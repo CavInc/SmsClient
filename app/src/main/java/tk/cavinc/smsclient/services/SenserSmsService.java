@@ -15,11 +15,14 @@ import android.telephony.SmsManager;
 import android.util.Log;
 import android.util.TimeUtils;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import tk.cavinc.smsclient.data.managers.DataManager;
+import tk.cavinc.smsclient.data.models.ShortCutMsgModel;
 import tk.cavinc.smsclient.data.models.SmsMessageModel;
 import tk.cavinc.smsclient.ui.MainActivity;
+import tk.cavinc.smsclient.utils.ParseAndConstructorSms;
 import tk.cavinc.smsclient.utils.Utils;
 
 import static android.content.ContentValues.TAG;
@@ -35,9 +38,14 @@ public class SenserSmsService extends Service {
     private DataManager mDataManager;
     private boolean runing = true;
 
+    private ArrayList<SmsMessageModel> smsMessage;
+    private ArrayList<ShortCutMsgModel> shortCutMsg;
+
     public SenserSmsService(){
         mDataManager = DataManager.getInstance();
         smsManager = SmsManager.getDefault();
+        smsMessage = mDataManager.getDB().getMessages();
+        //shortCutMsg = mDataManager.getDB().getShortCut();
     }
 
     @Nullable
@@ -71,24 +79,34 @@ public class SenserSmsService extends Service {
                         e.printStackTrace();
                     }
                     int count = mDataManager.getDB().getCountMsg();
+                    if (count > smsMessage.size()) {
+                        smsMessage = mDataManager.getDB().getMessages();
+                    }
                     int idMsg = 0;
 
-                    if (!mDataManager.getPrefManager().getMsgRnd()) {
-                        idMsg = Utils.getRandItem(count - 1);
-                        if (idMsg == 0) idMsg = 1;
-                    } else {
-                        idMsg = mDataManager.getPrefManager().getLastSendMessage();
-                        idMsg +=1;
-                        if (idMsg > count) {
-                            idMsg = 1;
+                    SmsMessageModel msg = null;
+                    do {
+                        if (!mDataManager.getPrefManager().getMsgRnd()) {
+                            idMsg = Utils.getRandItem(count - 1);
+                            if (idMsg == 0) idMsg = 1;
+                        } else {
+                            idMsg = mDataManager.getPrefManager().getLastSendMessage();
+                            idMsg += 1;
+                            if (idMsg > count) {
+                                idMsg = 1;
+                            }
+                            mDataManager.getPrefManager().setLastSendMsg(idMsg);
                         }
-                        mDataManager.getPrefManager().setLastSendMsg(idMsg);
-                    }
 
-                    Log.d(TAG,"ID "+idMsg);
+                        Log.d(TAG, "ID " + idMsg);
 
-                    SmsMessageModel msg = mDataManager.getDB().getMessagesId(idMsg);
+                        //msg = mDataManager.getDB().getMessagesId(idMsg);
+                        msg = smsMessage.get(idMsg-1);
+                    } while (msg == null);
+
                     Log.d(TAG, msg.getMsg());
+                    String msgIn = ParseAndConstructorSms.parse(msg.getMsg(),mDataManager);
+                    Log.d(TAG,msgIn);
 
 
                     String phone = "5556";//+15555215556
@@ -98,9 +116,9 @@ public class SenserSmsService extends Service {
 
                     //String phone = getPhone();
 
-                    //smsManager.sendTextMessage(phone, null, msg.getMsg(), null, null);
+                    //smsManager.sendTextMessage(phone, null, msgIn, null, null);
 
-                    mDataManager.getDB().addHistory(phone,msg.getMsg());
+                    mDataManager.getDB().addHistory(phone,msgIn);
                 }
             }
         }).start();

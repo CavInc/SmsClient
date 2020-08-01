@@ -126,7 +126,14 @@ public class DBConnect {
     // добавляем текст шортката
     public void addShortCut(String msg){
         open();
+        int maxId = 1;
+        Cursor cursor = database.rawQuery("select max(id)+1 as ci from "+DBHelper.SHORTCUT_MSG,null);
+        while (cursor.moveToNext()){
+            maxId = cursor.getInt(0);
+        }
+
         ContentValues values = new ContentValues();
+        values.put("id",maxId);
         values.put("msg",msg);
         database.insert(DBHelper.SHORTCUT_MSG,null,values);
         close();
@@ -162,6 +169,18 @@ public class DBConnect {
         values.put("msg",record.getMsg());
         database.update(DBHelper.SHORTCUT_MSG,values,"id="+record.getId(),null);
         close();
+    }
+
+    // количество шорткатов
+    public int countShortCut(){
+        int ret = 0;
+        open();
+        Cursor cursor = database.rawQuery("select count(id) as ci from "+DBHelper.SHORTCUT_MSG,null);
+        while (cursor.moveToNext()){
+            ret = cursor.getInt(0);
+        }
+        close();
+        return ret;
     }
 
     // получаем номера телефонов
