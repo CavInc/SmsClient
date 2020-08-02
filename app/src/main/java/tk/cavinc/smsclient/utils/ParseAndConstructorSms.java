@@ -52,9 +52,10 @@ public class ParseAndConstructorSms {
         txt = txt.replaceAll("[{]","");
         txt = txt.replaceAll("[}]","");
         if (txt.indexOf("+")!= -1){
-            // любой строка
+            // случайная строка
             ArrayList<ShortCutMsgModel> cutMsgModels = manager.getDB().getShortCut();
             int id = Utils.getRandItem(cutMsgModels.size());
+            Log.d(TAG," A: "+cutMsgModels.size()+" "+id);
             String cm = cutMsgModels.get(id-1).getMsg().replaceAll("\n","");
             txt = cm;
         } else {

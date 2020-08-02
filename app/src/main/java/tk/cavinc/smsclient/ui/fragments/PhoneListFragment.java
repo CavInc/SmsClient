@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ import tk.cavinc.smsclient.R;
 import tk.cavinc.smsclient.data.managers.DataManager;
 import tk.cavinc.smsclient.data.models.PhoneListModel;
 import tk.cavinc.smsclient.ui.adapters.PhoneAdapter;
+import tk.cavinc.smsclient.ui.dialogs.EditDeleteDialog;
 import tk.cavinc.smsclient.ui.dialogs.PhoneDialog;
 
 import static android.app.Activity.RESULT_OK;
@@ -38,14 +40,19 @@ import static android.app.Activity.RESULT_OK;
  * Created by cav on 26.07.20.
  */
 
-public class PhoneListFragment extends Fragment implements View.OnClickListener {
+public class PhoneListFragment extends Fragment implements View.OnClickListener,
+        AdapterView.OnItemLongClickListener,EditDeleteDialog.SelectEditDeleteListener {
 
     private static final int REQUEST_OPEN_DOCUMENT = 345;
     private static final String TAG = "PLF";
+    private static final int NEW_REC = 0;
+    private static final int EDIT_REC = 1;
     private DataManager mDataManager;
 
     private PhoneAdapter mAdapter;
     private ListView mListView;
+    private int mode;
+    private PhoneListModel selectPhone;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,6 +69,7 @@ public class PhoneListFragment extends Fragment implements View.OnClickListener 
         rootView.findViewById(R.id.fab).setOnClickListener(this);
 
         mListView = rootView.findViewById(R.id.phone_lv);
+        mListView.setOnItemLongClickListener(this);
 
         return rootView;
     }
@@ -190,6 +198,7 @@ public class PhoneListFragment extends Fragment implements View.OnClickListener 
 
     @Override
     public void onClick(View view) {
+        mode = NEW_REC;
         PhoneDialog dialog = new PhoneDialog();
         dialog.setPhoneDialogListener(mPhoneDialogListener);
         dialog.show(getFragmentManager(),"PD");
@@ -198,10 +207,39 @@ public class PhoneListFragment extends Fragment implements View.OnClickListener 
     PhoneDialog.PhoneDialogListener mPhoneDialogListener = new PhoneDialog.PhoneDialogListener() {
         @Override
         public void onChangePhone(String phone) {
-            mDataManager.getDB().open();
-            mDataManager.getDB().addPhone(phone);
-            mDataManager.getDB().close();
+            if (mode == NEW_REC) {
+                mDataManager.getDB().open();
+                mDataManager.getDB().addPhone(phone);
+                mDataManager.getDB().close();
+            } else {
+                mDataManager.getDB().updatePhone(selectPhone.getId(),phone);
+            }
             updateUI();
         }
     };
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        selectPhone = (PhoneListModel) parent.getItemAtPosition(position);
+        EditDeleteDialog deleteDialog = new EditDeleteDialog();
+        deleteDialog.setSelectEditDeleteListener(this);
+        deleteDialog.show(getFragmentManager(),"ED");
+        return true;
+    }
+
+    @Override
+    public void selectItem(int id) {
+        switch (id){
+            case R.id.edit_laout:
+                mode = EDIT_REC;
+                PhoneDialog dialog = PhoneDialog.newInstance(selectPhone.getPhone());
+                dialog.setPhoneDialogListener(mPhoneDialogListener);
+                dialog.show(getFragmentManager(),"PHP");
+                break;
+            case R.id.del_laout:
+                mDataManager.getDB().deletePhone(selectPhone.getId());
+                updateUI();
+                break;
+        }
+    }
 }

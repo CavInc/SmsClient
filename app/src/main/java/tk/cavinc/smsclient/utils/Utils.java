@@ -25,6 +25,7 @@ public class Utils {
 
     // получаем рандомное число
     public static int getRandItem(int maxID){
+        maxID -= 1;
         return (int) (Math.random() * ++maxID) + 1;
     }
 

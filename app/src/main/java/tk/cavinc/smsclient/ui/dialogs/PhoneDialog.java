@@ -43,6 +43,7 @@ public class PhoneDialog extends DialogFragment {
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.phone_dialog, null);
 
         mPhone = v.findViewById(R.id.phone_num);
+        mPhone.setText(phone);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Телефон")

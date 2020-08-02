@@ -212,6 +212,22 @@ public class DBConnect {
         database.insert(DBHelper.SEND_PHONE,null,values);
     }
 
+    // обновить номер телефона
+    public void updatePhone(int id,String phone) {
+        open();
+        ContentValues values = new ContentValues();
+        values.put("phone",phone);
+        database.update(DBHelper.SEND_PHONE,values,"id="+id,null);
+        close();
+    }
+
+    // удалить номер телефона
+    public void deletePhone(int id){
+        open();
+        database.delete(DBHelper.SEND_PHONE,"id="+id,null);
+        close();
+    }
+
 
     // получить количество номеров
     public int getCountPhone() {

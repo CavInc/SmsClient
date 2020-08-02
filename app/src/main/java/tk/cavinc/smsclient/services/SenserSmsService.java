@@ -56,7 +56,7 @@ public class SenserSmsService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        sendNotification("Quartech","Quartech","Mobile Officiant");
+        sendNotification("SMSClient","SmsClient","Отправка сообщений");
         work();
         return START_STICKY;
     }
@@ -73,11 +73,16 @@ public class SenserSmsService extends Service {
 
                     int delay = Utils.getRandItem(minDelay,maxDelay);
 
+                    Log.d(TAG,"DELAY : " + delay);
+
                     try {
                         TimeUnit.SECONDS.sleep(30);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+
+                    if (!runing) break;
+
                     int count = mDataManager.getDB().getCountMsg();
                     if (count > smsMessage.size()) {
                         smsMessage = mDataManager.getDB().getMessages();

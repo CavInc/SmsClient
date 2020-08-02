@@ -5,14 +5,21 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.util.ArrayList;
+
 import tk.cavinc.smsclient.R;
 import tk.cavinc.smsclient.data.managers.DataManager;
+import tk.cavinc.smsclient.data.models.ShortCutMsgModel;
 import tk.cavinc.smsclient.services.SenserSmsService;
+import tk.cavinc.smsclient.utils.Utils;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by cav on 25.07.20.
@@ -49,6 +56,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         return rootView;
     }
+
 
     // запуск сервиса
     public void onStartService(View v){
