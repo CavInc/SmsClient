@@ -76,7 +76,7 @@ public class SenserSmsService extends Service {
                     Log.d(TAG,"DELAY : " + delay);
 
                     try {
-                        TimeUnit.SECONDS.sleep(30);
+                        TimeUnit.SECONDS.sleep(delay);//было 30
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -92,7 +92,7 @@ public class SenserSmsService extends Service {
                     SmsMessageModel msg = null;
                     do {
                         if (!mDataManager.getPrefManager().getMsgRnd()) {
-                            idMsg = Utils.getRandItem(count - 1);
+                            idMsg = Utils.getRandItem(count);
                             if (idMsg == 0) idMsg = 1;
                         } else {
                             idMsg = mDataManager.getPrefManager().getLastSendMessage();

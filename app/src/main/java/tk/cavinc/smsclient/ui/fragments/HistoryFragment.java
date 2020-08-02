@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +25,8 @@ import tk.cavinc.smsclient.R;
 import tk.cavinc.smsclient.data.database.DBConnect;
 import tk.cavinc.smsclient.data.managers.DataManager;
 import tk.cavinc.smsclient.ui.adapters.HistoryAdapter;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by cav on 25.07.20.
@@ -68,6 +71,7 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
         switch (item.getItemId()) {
             case R.id.history_delete:
                 mDataManager.getDB().deleteHistory();
+                getLoaderManager().getLoader(0).forceLoad();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -78,8 +82,7 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
     @NonNull
     @Override
     public Loader onCreateLoader(int id, @Nullable Bundle args) {
-        //в этом методе мы создаем CursorLoader c определенным sql-запросом. В данном случае нам нужно выбрать все записи из таблицы Classes, и вместо условий выборки и сортировки задаем null.
-        return new MyCursorLoader(getActivity(), mDataManager.getDB());
+         return new MyCursorLoader(getActivity(), mDataManager.getDB());
     }
 
 
@@ -89,6 +92,7 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
         //посылаются новые данные в виде Cursor и сообщение о том, что
         //данные обновились и нужно заново отобразить список.
         mAdapter.swapCursor(data);
+        Log.d(TAG,"Получили");
     }
 
     @Override
@@ -111,6 +115,7 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
         public Cursor loadInBackground() {
             Cursor cursor = mDBConnect.getHistory();
             if (!first) {
+                Log.d(TAG,"Задержка перед запросом");
                 try {
                     TimeUnit.SECONDS.sleep(3);
                 } catch (InterruptedException e) {

@@ -274,6 +274,9 @@ public class DBConnect {
 
     // получить данные истории
     public Cursor getHistory(){
+        if (! database.isOpen()) {
+            open();
+        }
         Cursor cursor = database.query(DBHelper.HISTORY_SEND,
                 new String[]{"_id","send_date","phone","msg","status"},null,null,null,null,"send_date desc");
         return cursor;

@@ -57,6 +57,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         return rootView;
     }
 
+    // пауза
+    public void onPauseService(View v) {
+
+    }
 
     // запуск сервиса
     public void onStartService(View v){
@@ -87,6 +91,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             case R.id.main_stop:
                 onStopService(view);
                 mStart.setEnabled(true);
+                break;
+            case R.id.main_pause:
+                onPauseService(view);
                 break;
         }
     }
