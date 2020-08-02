@@ -35,7 +35,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private void updatedDB(SQLiteDatabase db,int oldVersion,int newVersion){
         db.execSQL("create table if not exists "+MSG+"(" +
-                "id integer PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                "id integer PRIMARY KEY NOT NULL," +
                 "msg text)");
 
         db.execSQL("create table if not exists "+SHORTCUT_MSG+"(" +

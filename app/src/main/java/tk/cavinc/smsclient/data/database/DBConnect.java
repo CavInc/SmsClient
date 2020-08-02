@@ -56,7 +56,15 @@ public class DBConnect {
     // добавляем текст сообщения
     public void addMessage(String msg){
         open();
+
+        int maxId = 1;
+        Cursor cursor = database.rawQuery("select max(id)+1 as ci from "+DBHelper.MSG,null);
+        while (cursor.moveToNext()){
+            maxId = cursor.getInt(0);
+        }
+
         ContentValues values = new ContentValues();
+        values.put("id",maxId);
         values.put("msg",msg);
         database.insert(DBHelper.MSG,null,values);
         close();

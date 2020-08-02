@@ -7,7 +7,7 @@ android {
         applicationId "tk.cavinc.smsclient"
         minSdkVersion 18
         targetSdkVersion 27
-        versionCode 1
+        versionCode 2
         versionName "1.0"
         resConfigs "en", "ru"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
