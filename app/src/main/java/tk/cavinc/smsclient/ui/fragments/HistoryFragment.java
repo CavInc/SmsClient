@@ -104,7 +104,6 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
 
     static class MyCursorLoader extends CursorLoader {
         private DBConnect mDBConnect;
-        private boolean first = true;
 
         public MyCursorLoader(@NonNull Context context, DBConnect db) {
             super(context);
@@ -114,16 +113,6 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
         @Override
         public Cursor loadInBackground() {
             Cursor cursor = mDBConnect.getHistory();
-            if (!first) {
-                Log.d(TAG,"Задержка перед запросом");
-                try {
-                    TimeUnit.SECONDS.sleep(3);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                first = false;
-            }
             return cursor;
         }
     }

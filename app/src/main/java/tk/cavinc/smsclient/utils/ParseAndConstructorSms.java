@@ -37,11 +37,8 @@ public class ParseAndConstructorSms {
         */
 
         while (matcher.find()) {
-            Log.d(TAG,matcher.group());
+           // Log.d(TAG,matcher.group());
             String mx = getSymbol(matcher.group(),manager);
-           // sms = matcher.replaceFirst(mx);
-            //sms.replaceAll(matcher.group(0),mx);
-            //sms = sms.replaceAll("\\{1\\}",mx);
            sms = sms.replace(matcher.group(),mx);
         }
 
@@ -55,7 +52,7 @@ public class ParseAndConstructorSms {
             // случайная строка
             ArrayList<ShortCutMsgModel> cutMsgModels = manager.getDB().getShortCut();
             int id = Utils.getRandItem(cutMsgModels.size());
-            Log.d(TAG," A: "+cutMsgModels.size()+" "+id);
+            //Log.d(TAG," A: "+cutMsgModels.size()+" "+id);
             String cm = cutMsgModels.get(id-1).getMsg().replaceAll("\n","");
             txt = cm;
         } else {

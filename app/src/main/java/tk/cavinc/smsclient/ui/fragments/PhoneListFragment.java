@@ -198,7 +198,7 @@ public class PhoneListFragment extends Fragment implements View.OnClickListener,
 
     // устанавливаем количество телефонов
     private void setPhoneCount(){
-        int count = mDataManager.getDB().getCountPhone();
+        int count = mDataManager.getDB().getPhoneMaxID();
         mDataManager.getPrefManager().setCountPhone(count);
     }
 

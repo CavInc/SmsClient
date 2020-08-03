@@ -112,9 +112,9 @@ public class SenserSmsService extends Service {
                         msg = smsMessage.get(idMsg-1);
                     } while (msg == null);
 
-                    Log.d(TAG, msg.getMsg());
+                    //Log.d(TAG, msg.getMsg());
                     String msgIn = ParseAndConstructorSms.parse(msg.getMsg(),mDataManager);
-                    Log.d(TAG,msgIn);
+                    //Log.d(TAG,msgIn);
 
 
                     String phone = "5556";//+15555215556
@@ -197,11 +197,13 @@ public class SenserSmsService extends Service {
     private String getPhone(){
         String phone = null;
         int coutPhone = mDataManager.getPrefManager().getCountPhone();
+        Log.d(TAG,"COUNT PHONE: "+coutPhone);
+        Log.d(TAG,"QUERY COUNT: "+mDataManager.getPrefManager().getCountQuery());
 
         int id = Utils.getRandItem(coutPhone);
 
         int cre = 0;
-        // крутим цикл
+        // крутим цикл по очереди пока не найдем пустой номер
         while (mDataManager.getDB().getIDQuery(id) != -1) {
             Log.d(TAG,"GET PHONE ID "+id);
             id = Utils.getRandItem(coutPhone);
@@ -217,11 +219,16 @@ public class SenserSmsService extends Service {
             }
             mDataManager.getDB().addQuery(id);
             mDataManager.getPrefManager().setCountQuery(mDataManager.getPrefManager().getCountQuery() + 1);
+            Log.d(TAG,"QUERY COUNT: "+mDataManager.getPrefManager().getCountQuery());
+            if (phone == null) {
+                phone = getPhone();
+            }
 
             if (mDataManager.getPrefManager().getCountQuery() >= coutPhone) {
                 // сбрасываем счетчики
                 mDataManager.getDB().deleteAllQuery();
                 mDataManager.getPrefManager().setCountQuery(0);
+                Log.d(TAG,"---------------------------");
             }
 
             return phone;

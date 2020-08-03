@@ -35,6 +35,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDataManager = DataManager.getInstance();
+
+        mDataManager.getDB().deleteAllQuery();
+        mDataManager.getPrefManager().setCountQuery(0);
     }
 
     @Nullable

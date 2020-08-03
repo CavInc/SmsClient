@@ -152,25 +152,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    /*
-    // запуск сервиса
-    public void onStartService(View v){
-        //mDataManager.getDB().deleteAllQuery();
-        Intent intent = new Intent(this, SenserSmsService.class);
-        // тодо тут надо добавить прверку на версию
-        //if (Build.VERSION)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(intent);
-        } else {
-            startService(intent);
-        }
-    }
 
-    // остановка сервиса
-    public void onStopService(View v){
-        Intent intent = new Intent(this,SenserSmsService.class);
-        stopService(intent);
-    }
-    */
 
 }
