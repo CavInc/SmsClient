@@ -101,6 +101,7 @@ public class PhoneListFragment extends Fragment implements View.OnClickListener,
 
     private void updateUI(){
         ArrayList<PhoneListModel> data = mDataManager.getDB().getPhone();
+        setPhoneCount();
         if (mAdapter == null) {
             mAdapter = new PhoneAdapter(getActivity(),R.layout.phone_item,data);
             mListView.setAdapter(mAdapter);
@@ -184,8 +185,7 @@ public class PhoneListFragment extends Fragment implements View.OnClickListener,
             br.close();
             mDataManager.getDB().close();
 
-            int count = mDataManager.getDB().getCountPhone();
-            mDataManager.getPrefManager().setCountPhone(count);
+            setPhoneCount();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -194,6 +194,12 @@ public class PhoneListFragment extends Fragment implements View.OnClickListener,
 
         updateUI();
 
+    }
+
+    // устанавливаем количество телефонов
+    private void setPhoneCount(){
+        int count = mDataManager.getDB().getCountPhone();
+        mDataManager.getPrefManager().setCountPhone(count);
     }
 
     @Override

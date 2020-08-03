@@ -139,6 +139,9 @@ public class DBConnect {
         while (cursor.moveToNext()){
             maxId = cursor.getInt(0);
         }
+        if (maxId == 0) {
+            maxId = 1;
+        }
 
         ContentValues values = new ContentValues();
         values.put("id",maxId);
@@ -259,6 +262,19 @@ public class DBConnect {
         }
         close();
         return phone;
+    }
+
+    // маскимальный индекс телефона
+    public int getPhoneMaxID(){
+        open();
+        int ret = 0;
+        String sql = "select max(id) from "+DBHelper.SEND_PHONE;
+        Cursor cursor = database.rawQuery(sql,null);
+        while (cursor.moveToNext()){
+            ret = cursor.getInt(0);
+        }
+        close();
+        return ret;
     }
 
     // записать данные о отправки сообщения

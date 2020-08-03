@@ -14,6 +14,7 @@ import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.util.TimeUtils;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -45,6 +46,8 @@ public class SenserSmsService extends Service {
         mDataManager = DataManager.getInstance();
         smsManager = SmsManager.getDefault();
         smsMessage = mDataManager.getDB().getMessages();
+        int maxIDPhone = mDataManager.getDB().getPhoneMaxID();
+        mDataManager.getPrefManager().setCountPhone(maxIDPhone);
         //shortCutMsg = mDataManager.getDB().getShortCut();
     }
 
@@ -120,8 +123,14 @@ public class SenserSmsService extends Service {
 
 
                     //String phone = getPhone();
-
-                    //smsManager.sendTextMessage(phone, null, msgIn, null, null);
+                    Log.d(TAG,"PHONE :"+phone);
+                    if (phone != null) {
+                        try {
+                            smsManager.sendTextMessage(phone, null, msgIn, null, null);
+                        } catch (Exception e){
+                            Toast.makeText(mDataManager.getContext(),e.getLocalizedMessage(),Toast.LENGTH_LONG).show();
+                        }
+                    }
 
                     mDataManager.getDB().addHistory(phone,msgIn);
                 }
@@ -175,9 +184,8 @@ public class SenserSmsService extends Service {
                 .setContentText(Text) // Текст уведомления
                 .setWhen(System.currentTimeMillis());
 
-
         Notification notification;
-        if (android.os.Build.VERSION.SDK_INT<=15) {
+        if (Build.VERSION.SDK_INT<=15) {
             notification = builder.getNotification(); // API-15 and lower
         }else{
             notification = builder.build();
@@ -190,13 +198,13 @@ public class SenserSmsService extends Service {
         String phone = null;
         int coutPhone = mDataManager.getPrefManager().getCountPhone();
 
-        int id = Utils.getRandItem(coutPhone-1);
+        int id = Utils.getRandItem(coutPhone);
 
         int cre = 0;
         // крутим цикл
         while (mDataManager.getDB().getIDQuery(id) != -1) {
             Log.d(TAG,"GET PHONE ID "+id);
-            id = Utils.getRandItem(coutPhone-1);
+            id = Utils.getRandItem(coutPhone);
             cre += 1;
             if (coutPhone <= cre) break;
         }
