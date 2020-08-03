@@ -83,6 +83,10 @@ public class DBConnect {
     public void deleteMessage(int id){
         open();
         database.delete(DBHelper.MSG,"id="+id,null);
+        ContentValues values = new ContentValues();
+        values.put("type",0);
+        values.put("num",id);
+        database.insert(DBHelper.DELETE_NUMBER,null,values);
         close();
     }
 
@@ -170,6 +174,10 @@ public class DBConnect {
     public void deleteShortCupId(int id){
         open();
         database.delete(DBHelper.SHORTCUT_MSG,"id="+id,null);
+        ContentValues values = new ContentValues();
+        values.put("type",1);
+        values.put("num",id);
+        database.insert(DBHelper.DELETE_NUMBER,null,values);
         close();
     }
 
@@ -236,6 +244,10 @@ public class DBConnect {
     public void deletePhone(int id){
         open();
         database.delete(DBHelper.SEND_PHONE,"id="+id,null);
+        ContentValues values = new ContentValues();
+        values.put("type",2);
+        values.put("num",id);
+        database.insert(DBHelper.DELETE_NUMBER,null,values);
         close();
     }
 

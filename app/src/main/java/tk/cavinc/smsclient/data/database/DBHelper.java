@@ -17,6 +17,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static String SEND_PHONE = "send_phone";
     public static String HISTORY_SEND = "history_send";
     public static String QUERY_PHONE = "query_phone";
+    public static String DELETE_NUMBER = "delete_number"; // удаленные номера
 
 
     public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version){
@@ -55,6 +56,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL("create table if not exists "+QUERY_PHONE+"(" +
                 "id integer primary key not null)");
+
+        db.execSQL("create table if not exists "+DELETE_NUMBER+"(" +
+                "type integer not null," + // 0 - сообщения 1 - шорткаты 2- телефоны
+                "num integer not null," +
+                "primary key (type,num)");
 
     }
 }
