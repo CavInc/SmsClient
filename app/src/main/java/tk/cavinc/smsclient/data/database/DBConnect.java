@@ -138,10 +138,25 @@ public class DBConnect {
     // добавляем текст шортката
     public void addShortCut(String msg){
         open();
-        int maxId = 1;
-        Cursor cursor = database.rawQuery("select max(id)+1 as ci from "+DBHelper.SHORTCUT_MSG,null);
-        while (cursor.moveToNext()){
-            maxId = cursor.getInt(0);
+        int maxId = 0;
+        // берем номер из базы удаленных
+        String sql = "select  num from "+DBHelper.DELETE_NUMBER+"\n" +
+                "where type=1 \n" +
+                "order by type,num\n" +
+                "limit 1";
+
+        Cursor cursorMx = database.rawQuery(sql,null);
+        while (cursorMx.moveToNext()){
+            maxId = cursorMx.getInt(0);
+            database.delete(DBHelper.DELETE_NUMBER,"type=1 and num="+maxId,null);
+        }
+
+        if (maxId == 0) {
+            // поиск максимального
+            Cursor cursor = database.rawQuery("select max(id)+1 as ci from " + DBHelper.SHORTCUT_MSG, null);
+            while (cursor.moveToNext()) {
+                maxId = cursor.getInt(0);
+            }
         }
         if (maxId == 0) {
             maxId = 1;

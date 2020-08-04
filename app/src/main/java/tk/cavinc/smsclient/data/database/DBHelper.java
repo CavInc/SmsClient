@@ -60,7 +60,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("create table if not exists "+DELETE_NUMBER+"(" +
                 "type integer not null," + // 0 - сообщения 1 - шорткаты 2- телефоны
                 "num integer not null," +
-                "primary key (type,num)");
+                "primary key (type,num))");
 
     }
 }
