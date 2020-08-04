@@ -118,22 +118,26 @@ public class SenserSmsService extends Service {
                     //Log.d(TAG,msgIn);
 
 
-                    //String phone = "5556";//+15555215556
+                    String phone = "5556";//+15555215556
 
-                    //phone = getPhone2();
+                    phone = getPhone2();
 
-                    String phone = getPhone2();
+                    //String phone = getPhone2();
                     Log.d(TAG,"PHONE :"+phone);
+
+
+
                     if (phone != null) {
                         try {
                             smsManager.sendTextMessage(phone, null, msgIn, null, null);
                         } catch (Exception e){
                             Toast.makeText(mDataManager.getContext(),e.getLocalizedMessage(),Toast.LENGTH_LONG).show();
                         }
+                        mDataManager.getDB().addHistory(phone,msgIn);
+                        App.getChangeHistoryManager().setChange(msgIn);
                     }
 
-                    mDataManager.getDB().addHistory(phone,msgIn);
-                    App.getChangeHistoryManager().setChange(msgIn);
+
                 }
             }
         }).start();
@@ -225,13 +229,13 @@ public class SenserSmsService extends Service {
                 mDataManager.getDB().deleteAllQuery();
                 mDataManager.getPrefManager().setCountQuery(0);
                 Log.d(TAG,"---------------------------");
+                runing = false; // останавливаем отправку
+                stopSelf();
             }
 
         }while (phone == null);
 
         // нашли телефон
-
-
         return phone;
     }
 

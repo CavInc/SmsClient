@@ -45,7 +45,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL("create table if not exists "+SEND_PHONE+" (" +
                 "id integer PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                "phone text)");
+                "phone text," +
+                "status integer default 0)");
 
         db.execSQL("create table if not exists "+HISTORY_SEND+"(" +
                 "_id integer PRIMARY KEY AUTOINCREMENT NOT NULL," +
