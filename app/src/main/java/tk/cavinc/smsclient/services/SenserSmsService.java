@@ -23,6 +23,7 @@ import tk.cavinc.smsclient.data.managers.DataManager;
 import tk.cavinc.smsclient.data.models.ShortCutMsgModel;
 import tk.cavinc.smsclient.data.models.SmsMessageModel;
 import tk.cavinc.smsclient.ui.MainActivity;
+import tk.cavinc.smsclient.utils.App;
 import tk.cavinc.smsclient.utils.ParseAndConstructorSms;
 import tk.cavinc.smsclient.utils.Utils;
 
@@ -117,12 +118,11 @@ public class SenserSmsService extends Service {
                     //Log.d(TAG,msgIn);
 
 
-                    String phone = "5556";//+15555215556
+                    //String phone = "5556";//+15555215556
 
-                    phone = getPhone();
+                    //phone = getPhone2();
 
-
-                    //String phone = getPhone();
+                    String phone = getPhone2();
                     Log.d(TAG,"PHONE :"+phone);
                     if (phone != null) {
                         try {
@@ -133,6 +133,7 @@ public class SenserSmsService extends Service {
                     }
 
                     mDataManager.getDB().addHistory(phone,msgIn);
+                    App.getChangeHistoryManager().setChange(msgIn);
                 }
             }
         }).start();
@@ -191,6 +192,47 @@ public class SenserSmsService extends Service {
             notification = builder.build();
         }
         startForeground(DEFAULT_NOTIFICATION_ID, notification);
+    }
+
+    private int getFreeIDQuery(int searchId,int countPhone){
+        int cre = 0;
+        while (mDataManager.getDB().getIDQuery(searchId) != -1){
+            Log.d(TAG,"QUERY PHONE ID : "+searchId);
+            searchId = Utils.getRandItem(countPhone);
+            cre += 1;
+            if (cre > countPhone) break;
+        }
+        return searchId;
+    }
+
+    // получаем телефон
+    private String getPhone2(){
+        String phone = null;
+        int coutPhone = mDataManager.getPrefManager().getCountPhone(); // количество телефонов
+        if (coutPhone == 0) return phone;
+
+        int id = Utils.getRandItem(coutPhone);
+        do {
+            id = getFreeIDQuery(id, coutPhone); // получили свободный номер в очереди
+            phone = mDataManager.getDB().getPhoneId(id);
+
+            mDataManager.getDB().addQuery(id);
+            mDataManager.getPrefManager().setCountQuery(mDataManager.getPrefManager().getCountQuery() + 1);
+            Log.d(TAG,"QUERY COUNT: "+mDataManager.getPrefManager().getCountQuery());
+
+            if (mDataManager.getPrefManager().getCountQuery() >= coutPhone) {
+                // сбрасываем счетчики
+                mDataManager.getDB().deleteAllQuery();
+                mDataManager.getPrefManager().setCountQuery(0);
+                Log.d(TAG,"---------------------------");
+            }
+
+        }while (phone == null);
+
+        // нашли телефон
+
+
+        return phone;
     }
 
     // получаем телефон

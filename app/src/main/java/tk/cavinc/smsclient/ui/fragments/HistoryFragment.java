@@ -19,12 +19,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.TimeUnit;
 
 import tk.cavinc.smsclient.R;
 import tk.cavinc.smsclient.data.database.DBConnect;
 import tk.cavinc.smsclient.data.managers.DataManager;
 import tk.cavinc.smsclient.ui.adapters.HistoryAdapter;
+import tk.cavinc.smsclient.utils.App;
 
 import static android.content.ContentValues.TAG;
 
@@ -32,7 +35,7 @@ import static android.content.ContentValues.TAG;
  * Created by cav on 25.07.20.
  */
 
-public class HistoryFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class HistoryFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,Observer {
 
     private DataManager mDataManager;
 
@@ -78,6 +81,17 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        App.getChangeHistoryManager().addObserver(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        App.getChangeHistoryManager().deleteObserver(this);
+    }
 
     @NonNull
     @Override
@@ -100,6 +114,11 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
         //если в полученном результате sql-запроса нет никаких строк,
         //то говорим адаптеру, что список нужно очистить
         mAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        getLoaderManager().getLoader(0).forceLoad();
     }
 
     static class MyCursorLoader extends CursorLoader {

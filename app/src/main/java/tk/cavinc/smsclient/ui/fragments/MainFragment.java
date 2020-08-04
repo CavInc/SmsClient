@@ -36,8 +36,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         mDataManager = DataManager.getInstance();
 
-        mDataManager.getDB().deleteAllQuery();
-        mDataManager.getPrefManager().setCountQuery(0);
+        //mDataManager.getDB().deleteAllQuery();
+        //mDataManager.getPrefManager().setCountQuery(0);
     }
 
     @Nullable
