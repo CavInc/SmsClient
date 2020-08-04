@@ -237,11 +237,12 @@ public class DBConnect {
         ArrayList<PhoneListModel> rec = new ArrayList<>();
         open();
         Cursor cursor = database.query(DBHelper.SEND_PHONE,
-                new String[]{"id","phone"},null,null,null,
+                new String[]{"id","phone","status"},null,null,null,
                 null,"id");
         while (cursor.moveToNext()){
             rec.add(new PhoneListModel(cursor.getInt(cursor.getColumnIndex("id")),
-                    cursor.getString(cursor.getColumnIndex("phone"))));
+                    cursor.getString(cursor.getColumnIndex("phone")),
+                    (cursor.getInt(cursor.getColumnIndex("status")) == 0 ? false : true)));
         }
         close();
         return rec;
@@ -281,6 +282,29 @@ public class DBConnect {
         close();
     }
 
+    // изменить статус
+    public void updatePhoneStatus(int id,boolean status) {
+        open();
+        ContentValues values = new ContentValues();
+        values.put("status",(status?1:0));
+        database.update(DBHelper.SEND_PHONE,values,"id="+id,null);
+        close();
+    }
+
+    // получить объект телефона по номеру
+    public PhoneListModel getPhoneObject(int id){
+        PhoneListModel rec = null;
+        open();
+        Cursor  cursor = database.query(DBHelper.SEND_PHONE,new String[]{"id","phone","status"},
+                "id="+id,null,null,null,null);
+        while (cursor.moveToNext()){
+            rec = new PhoneListModel(cursor.getInt(cursor.getColumnIndex("id")),
+                    cursor.getString(cursor.getColumnIndex("phone")),
+                    (cursor.getInt(cursor.getColumnIndex("status")) == 0 ? false : true));
+        }
+        close();
+        return rec;
+    }
 
     // получить количество номеров
     public int getCountPhone() {
@@ -298,7 +322,8 @@ public class DBConnect {
     public String getPhoneId(int id) {
         String phone = null;
         open();
-        Cursor cursor = database.query(DBHelper.SEND_PHONE,new String[]{"phone"},"id="+id,null,null,null,null);
+        Cursor cursor = database.query(DBHelper.SEND_PHONE,new String[]{"phone"},"id="+id,
+                null,null,null,null);
         while (cursor.moveToNext()){
             phone = cursor.getString(0);
         }
