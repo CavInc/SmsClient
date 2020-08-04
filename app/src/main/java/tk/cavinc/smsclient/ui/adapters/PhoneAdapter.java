@@ -53,9 +53,9 @@ public class PhoneAdapter extends ArrayAdapter<PhoneListModel> {
 
         holder.mPhone.setText(record.getPhone());
         if (record.isStatusSend()){
-            holder.mStatus.setBackgroundResource(R.drawable.ic_textsms_green_24dp);
+            holder.mStatus.setImageResource(R.drawable.ic_textsms_green_24dp);
         } else {
-            holder.mStatus.setBackgroundResource(R.drawable.ic_textsms_red_24dp);
+            holder.mStatus.setImageResource(R.drawable.ic_textsms_red_24dp);
         }
 
         return row;

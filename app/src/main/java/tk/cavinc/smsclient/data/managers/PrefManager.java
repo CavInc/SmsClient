@@ -15,6 +15,7 @@ public class PrefManager {
     private static final String COUNT_QUERY = "COUNT_QUERY";
     private static final String PERIOD_FROM = "PF";
     private static final String PERIOD_TO = "PT";
+    private static final String LAST_SEND_PHONE = "LAST_SEND_PHONE";
     private SharedPreferences mSharedPreferences;
 
     public PrefManager(){
@@ -84,6 +85,17 @@ public class PrefManager {
     public void setPeriodTo(int periodTo){
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putInt(PERIOD_TO,periodTo);
+        editor.apply();
+    }
+
+    // последний использованный индекс телефона
+    public int getLastPhone(){
+        return mSharedPreferences.getInt(LAST_SEND_PHONE,0);
+    }
+
+    public void setLastPhone(int id){
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putInt(LAST_SEND_PHONE,id);
         editor.apply();
     }
 }

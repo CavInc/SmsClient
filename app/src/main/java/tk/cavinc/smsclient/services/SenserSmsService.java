@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import tk.cavinc.smsclient.data.managers.DataManager;
+import tk.cavinc.smsclient.data.models.PhoneListModel;
 import tk.cavinc.smsclient.data.models.ShortCutMsgModel;
 import tk.cavinc.smsclient.data.models.SmsMessageModel;
 import tk.cavinc.smsclient.ui.MainActivity;
@@ -120,7 +121,7 @@ public class SenserSmsService extends Service {
 
                     String phone = "5556";//+15555215556
 
-                    phone = getPhone2();
+                    phone = getPhone3();
 
                     //String phone = getPhone2();
                     Log.d(TAG,"PHONE :"+phone);
@@ -207,6 +208,51 @@ public class SenserSmsService extends Service {
             if (cre > countPhone) break;
         }
         return searchId;
+    }
+
+
+    // получаем телефон
+    private String getPhone3(){
+        String phone = null;
+
+        int coutPhone = mDataManager.getPrefManager().getCountPhone(); // количество телефонов
+        if (coutPhone == 0) return phone;
+
+        int id = 0;
+
+        boolean checkPhone = true;
+        do {
+            if (!mDataManager.getPrefManager().getPhoneRnd()) {
+                id = Utils.getRandItem(coutPhone);
+            } else {
+                id = mDataManager.getPrefManager().getLastPhone();
+                id += 1;
+                if (id > coutPhone) {
+                    id = 0;
+                    mDataManager.getPrefManager().setLastPhone(id);
+                    runing = false;
+                    stopSelf();
+                }
+                mDataManager.getPrefManager().setLastPhone(id);
+            }
+            PhoneListModel record = mDataManager.getDB().getPhoneObject(id);
+            if (!record.isStatusSend()) {
+                checkPhone = false;
+                phone = record.getPhone();
+                //TODO установка флага после отправки
+                mDataManager.getDB().updatePhoneStatus(record.getId(),true);
+                int query = mDataManager.getPrefManager().getCountQuery();
+                query += 1;
+                if (query>coutPhone) {
+                    // останавливаемся
+
+                }
+                mDataManager.getPrefManager().setCountQuery(query);
+            }
+        } while (checkPhone);
+
+
+        return phone;
     }
 
     // получаем телефон
