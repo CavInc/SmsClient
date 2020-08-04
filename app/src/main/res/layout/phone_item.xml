@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:paddingBottom="8dp"
-    android:paddingTop="8dp"
-    android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/phone_num_item"
-        android:textSize="18sp"
-        android:textStyle="bold"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:paddingBottom="8dp"
+              android:paddingTop="8dp"
+              android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/phone_num_status"
+            android:src="@drawable/ic_textsms_red_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/phone_num_item"
+            tools:text="+78001112233"
+            android:layout_marginLeft="8dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </LinearLayout>

@@ -11,7 +11,9 @@
             android:key="msg_rand"
             android:title="Сообщения по порядку"/>
     </PreferenceCategory>
-    <PreferenceCategory>
-
+    <PreferenceCategory android:title="Порядок обхода телефонов">
+        <CheckBoxPreference
+            android:key="phone_rand"
+            android:title="Телефоны по порядку"/>
     </PreferenceCategory>
 </PreferenceScreen>

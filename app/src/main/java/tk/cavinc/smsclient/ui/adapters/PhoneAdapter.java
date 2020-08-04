@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class PhoneAdapter extends ArrayAdapter<PhoneListModel> {
             row = mInflater.inflate(resLayout, parent, false);
             holder = new ViewHolder();
 
+            holder.mStatus = row.findViewById(R.id.phone_num_status);
             holder.mPhone = row.findViewById(R.id.phone_num_item);
 
             row.setTag(holder);
@@ -50,6 +52,11 @@ public class PhoneAdapter extends ArrayAdapter<PhoneListModel> {
         PhoneListModel record = getItem(position);
 
         holder.mPhone.setText(record.getPhone());
+        if (record.isStatusSend()){
+            holder.mStatus.setBackgroundResource(R.drawable.ic_textsms_green_24dp);
+        } else {
+            holder.mStatus.setBackgroundResource(R.drawable.ic_textsms_red_24dp);
+        }
 
         return row;
     }
@@ -60,6 +67,7 @@ public class PhoneAdapter extends ArrayAdapter<PhoneListModel> {
     }
 
     private class ViewHolder{
+        public ImageView mStatus;
         public TextView mPhone;
     }
 }

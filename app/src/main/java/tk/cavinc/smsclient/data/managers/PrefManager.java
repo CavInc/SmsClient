@@ -29,6 +29,10 @@ public class PrefManager {
         return mSharedPreferences.getBoolean("msg_rand",false);
     }
 
+    public boolean getPhoneRnd(){
+        return mSharedPreferences.getBoolean("phone_rand",false);
+    }
+
     // последняя оправленная запись
     public int getLastSendMessage(){
         return mSharedPreferences.getInt(LAST_SEND_MSG,1);
