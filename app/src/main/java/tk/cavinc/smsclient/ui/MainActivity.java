@@ -17,6 +17,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.CellInfo;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.MenuItem;
@@ -27,6 +29,7 @@ import java.util.List;
 import tk.cavinc.smsclient.R;
 import tk.cavinc.smsclient.data.managers.DataManager;
 import tk.cavinc.smsclient.data.managers.SimManager;
+import tk.cavinc.smsclient.data.models.SimDataModel;
 import tk.cavinc.smsclient.services.SenserSmsService;
 import tk.cavinc.smsclient.ui.fragments.HistoryFragment;
 import tk.cavinc.smsclient.ui.fragments.MainFragment;
@@ -180,20 +183,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // проверяем на 2 симочность
     private void testDuoSim(){
+        /*
         TelephonyManager manager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         Log.i("OmSai ", "Single or Dula Sim "+manager.getPhoneCount());
 
         Log.i("OmSai ", "Defualt device ID "+manager.getDeviceId());
         Log.i("OmSai ", "Single 1 "+manager.getDeviceId(0));
         Log.i("OmSai ", "Single 2 "+manager.getDeviceId(1));
+        */
 
+        SubscriptionManager subscriptionManager = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+            subscriptionManager = SubscriptionManager.from(getApplicationContext());
+            List<SubscriptionInfo> activeSubscriptionInfoList = subscriptionManager.getActiveSubscriptionInfoList();
+            int simCount = activeSubscriptionInfoList.size();
+            Log.d("MainActivity: ","simCount:" +simCount);
+            for (SubscriptionInfo subscriptionInfo : activeSubscriptionInfoList) {
+                Log.d("MainActivity: ","iccId :"+ subscriptionInfo.getIccId()+" , name : "+ subscriptionInfo.getDisplayName());
+                Log.d(TAG,"SIM SLOT IDNDEX : "+subscriptionInfo.getSimSlotIndex());
+                mDataManager.getSimDataModel().add(new SimDataModel(subscriptionInfo.getSimSlotIndex(),
+                        subscriptionInfo.getDisplayName().toString()));
+            }
+        }
 
-
+        /*
         SimManager simManager = new SimManager(this);
         if (simManager.isSupported()){
             Log.d(TAG,"DUO Test ");
         }
         Log.d(TAG,"SIM MODE :"+simManager.getSimMode());
+        */
     }
 
 

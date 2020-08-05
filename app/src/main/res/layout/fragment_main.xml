@@ -3,9 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
+    android:paddingTop="8dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="tk.cavinc.smsclient.ui.fragments.MainFragment">
+
+    <LinearLayout
+        android:id="@+id/select_sim"
+        android:visibility="gone"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ToggleButton
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <ToggleButton
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/main_start"

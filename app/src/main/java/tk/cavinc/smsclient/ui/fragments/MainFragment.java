@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Obser
 
     private Button mStart;
     private Button mStop;
+    private LinearLayout mSimSelect;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +44,9 @@ public class MainFragment extends Fragment implements View.OnClickListener,Obser
 
         //mDataManager.getDB().deleteAllQuery();
         //mDataManager.getPrefManager().setCountQuery(0);
+        if (mDataManager.getSimDataModel().size() > 1) {
+            //TODO включаем кнопки для симок
+        }
     }
 
     @Nullable
