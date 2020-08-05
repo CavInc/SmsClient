@@ -3,6 +3,7 @@ package tk.cavinc.smsclient.ui;
 import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -15,11 +16,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.CellInfo;
+import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.List;
+
 import tk.cavinc.smsclient.R;
 import tk.cavinc.smsclient.data.managers.DataManager;
+import tk.cavinc.smsclient.data.managers.SimManager;
 import tk.cavinc.smsclient.services.SenserSmsService;
 import tk.cavinc.smsclient.ui.fragments.HistoryFragment;
 import tk.cavinc.smsclient.ui.fragments.MainFragment;
@@ -32,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private static final int REQUEST_WRITER = 219;
     private static final int REQUEST_SMS = 218;
+    private static final String TAG = "MA";
+    private static final int REQUEST_PHONE = 214;
     private DataManager mDataManager;
     private DrawerLayout mNavigationDrawer;
     private NavigationView navigationView;
@@ -86,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         setPermission();
+        //testDuoSim();
     }
 
     @Override
@@ -150,8 +160,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (ContextCompat.checkSelfPermission(this,Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.SEND_SMS},REQUEST_SMS);
         }
+
+        if (ContextCompat.checkSelfPermission(this,Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_PHONE_STATE},REQUEST_PHONE);
+        } else {
+            testDuoSim();
+        }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PHONE:
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    // проверяем на 2 симочность
+    private void testDuoSim(){
+        TelephonyManager manager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        Log.i("OmSai ", "Single or Dula Sim "+manager.getPhoneCount());
+
+        Log.i("OmSai ", "Defualt device ID "+manager.getDeviceId());
+        Log.i("OmSai ", "Single 1 "+manager.getDeviceId(0));
+        Log.i("OmSai ", "Single 2 "+manager.getDeviceId(1));
+
+
+
+        SimManager simManager = new SimManager(this);
+        if (simManager.isSupported()){
+            Log.d(TAG,"DUO Test ");
+        }
+        Log.d(TAG,"SIM MODE :"+simManager.getSimMode());
+    }
 
 
 }

@@ -41,6 +41,8 @@ public class SenserSmsService extends Service {
     private DataManager mDataManager;
     private boolean runing = true;
 
+    String DELIVER_SMS_FLAG = "DELIVER_SMS";
+
     private ArrayList<SmsMessageModel> smsMessage;
     private ArrayList<ShortCutMsgModel> shortCutMsg;
 
@@ -165,8 +167,8 @@ public class SenserSmsService extends Service {
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         //для А8+
         if (Build.VERSION.SDK_INT >= 26) {
-            NotificationChannel channel = new NotificationChannel(CHANEL_ID,"Reminder", NotificationManager.IMPORTANCE_HIGH);
-            channel.setDescription("Reminder");
+            NotificationChannel channel = new NotificationChannel(CHANEL_ID,"SMSClient", NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription("SMSClient");
             channel.enableLights(true);
             channel.enableVibration(true);
             notificationManager.createNotificationChannel(channel);
