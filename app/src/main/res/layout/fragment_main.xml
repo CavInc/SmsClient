@@ -14,12 +14,20 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ToggleButton
+        <Button
+            android:id="@+id/sim1"
             android:layout_weight="1"
+            android:background="@drawable/button_red_bg"
+            android:textColor="@color/app_red"
+            android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <ToggleButton
+        <Button
+            android:id="@+id/sim2"
             android:layout_weight="1"
+            android:background="@drawable/button_red_bg"
+            android:textColor="@color/app_red"
+            android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

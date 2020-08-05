@@ -37,6 +37,9 @@ public class MainFragment extends Fragment implements View.OnClickListener,Obser
     private Button mStop;
     private LinearLayout mSimSelect;
 
+    private Button mSim1;
+    private Button mSim2;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,10 +47,8 @@ public class MainFragment extends Fragment implements View.OnClickListener,Obser
 
         //mDataManager.getDB().deleteAllQuery();
         //mDataManager.getPrefManager().setCountQuery(0);
-        if (mDataManager.getSimDataModel().size() > 1) {
-            //TODO включаем кнопки для симок
-        }
     }
+
 
     @Nullable
     @Override
@@ -65,6 +66,21 @@ public class MainFragment extends Fragment implements View.OnClickListener,Obser
         } else {
             mStart.setEnabled(true);
         }
+
+        mSimSelect = rootView.findViewById(R.id.select_sim);
+        mSim1 = rootView.findViewById(R.id.sim1);
+        mSim2 = rootView.findViewById(R.id.sim2);
+
+        mSim1.setOnClickListener(this);
+        mSim2.setOnClickListener(this);
+
+        if (mDataManager.getSimDataModel().size() > 1) {
+            //TODO включаем кнопки для симок
+            mSimSelect.setVisibility(View.VISIBLE);
+            mSim1.setText(mDataManager.getSimDataModel().get(0).getName());
+            mSim2.setText(mDataManager.getSimDataModel().get(1).getName());
+        }
+
 
         return rootView;
     }
@@ -123,6 +139,11 @@ public class MainFragment extends Fragment implements View.OnClickListener,Obser
                 break;
             case R.id.main_pause:
                 onPauseService(view);
+                break;
+            case R.id.sim1:
+                mSim1.setActivated(true);
+                break;
+            case R.id.sim2:
                 break;
         }
     }
