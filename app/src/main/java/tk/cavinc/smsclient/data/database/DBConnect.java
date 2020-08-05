@@ -257,6 +257,18 @@ public class DBConnect {
 
     // записать номер телефона (мульт)
     public void addPhone(String phone){
+        int maxId = 0;
+        if (maxId == 0) {
+            // поиск максимального
+            Cursor cursor = database.rawQuery("select max(id)+1 as ci from " + DBHelper.SEND_PHONE, null);
+            while (cursor.moveToNext()) {
+                maxId = cursor.getInt(0);
+            }
+        }
+        if (maxId == 0) {
+            maxId = 1;
+        }
+
         ContentValues values = new ContentValues();
         values.put("phone",phone);
         database.insert(DBHelper.SEND_PHONE,null,values);

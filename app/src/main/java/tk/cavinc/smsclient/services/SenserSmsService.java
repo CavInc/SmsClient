@@ -108,7 +108,7 @@ public class SenserSmsService extends Service {
                             mDataManager.getPrefManager().setLastSendMsg(idMsg);
                         }
 
-                        Log.d(TAG, "ID " + idMsg);
+                        //Log.d(TAG, "ID " + idMsg);
 
                         //msg = mDataManager.getDB().getMessagesId(idMsg);
                         msg = smsMessage.get(idMsg-1);
@@ -213,7 +213,7 @@ public class SenserSmsService extends Service {
 
     // получаем телефон
     private String getPhone3(){
-        String phone = null;
+         String phone = null;
 
         int coutPhone = mDataManager.getPrefManager().getCountPhone(); // количество телефонов
         if (coutPhone == 0) return phone;
@@ -230,30 +230,55 @@ public class SenserSmsService extends Service {
                 if (id > coutPhone) {
                     id = 0;
                     mDataManager.getPrefManager().setLastPhone(id);
-                    runing = false;
-                    stopSelf();
+                    stopService();
                 }
                 mDataManager.getPrefManager().setLastPhone(id);
             }
+
+            Log.d(TAG,"GET PHONE ID "+id);
+
             PhoneListModel record = mDataManager.getDB().getPhoneObject(id);
-            if (!record.isStatusSend()) {
-                checkPhone = false;
-                phone = record.getPhone();
-                //TODO установка флага после отправки
-                mDataManager.getDB().updatePhoneStatus(record.getId(),true);
-                int query = mDataManager.getPrefManager().getCountQuery();
-                query += 1;
-                if (query>coutPhone) {
-                    // останавливаемся
-                    runing = false;
-                    stopSelf();
+            if (record != null) {
+                if (!record.isStatusSend()) {
+                    checkPhone = false;
+                    phone = record.getPhone();
+                    //TODO установка флага после отправки
+                    mDataManager.getDB().updatePhoneStatus(record.getId(), true);
+                    if (checkEndQuery()) {
+                        checkPhone = false;
+                        stopService();
+                    }
+                } else {
+                   if (checkEndQuery()) {
+                       checkPhone = false;
+                       Log.d(TAG, "---------------------------");
+                       stopService();
+                   }
                 }
-                mDataManager.getPrefManager().setCountQuery(query);
+            } else {
+                if (checkEndQuery()) {
+                    checkPhone = false;
+                    // останавливаемся
+                    Log.d(TAG, " NULL PHONE ");
+                    Log.d(TAG, "---------------------------");
+                    stopService();
+                }
             }
         } while (checkPhone);
 
-
         return phone;
+    }
+
+    private boolean checkEndQuery(){
+        int query = mDataManager.getDB().getNoWorkCountPhone();
+        if (query == 0) return true;
+        return false;
+    }
+
+    private void stopService(){
+        runing = false;
+        App.getStopServiceObserver().setStopService(true);
+        stopSelf();
     }
 
     // получаем телефон

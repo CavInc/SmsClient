@@ -13,11 +13,14 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import tk.cavinc.smsclient.R;
 import tk.cavinc.smsclient.data.managers.DataManager;
 import tk.cavinc.smsclient.data.models.ShortCutMsgModel;
 import tk.cavinc.smsclient.services.SenserSmsService;
+import tk.cavinc.smsclient.utils.App;
 import tk.cavinc.smsclient.utils.Utils;
 
 import static android.content.ContentValues.TAG;
@@ -26,7 +29,7 @@ import static android.content.ContentValues.TAG;
  * Created by cav on 25.07.20.
  */
 
-public class MainFragment extends Fragment implements View.OnClickListener {
+public class MainFragment extends Fragment implements View.OnClickListener,Observer {
     private DataManager mDataManager;
 
     private Button mStart;
@@ -59,6 +62,18 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        App.getStopServiceObserver().addObserver(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        App.getStopServiceObserver().deleteObserver(this);
     }
 
     // пауза
@@ -104,6 +119,15 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             case R.id.main_pause:
                 onPauseService(view);
                 break;
+        }
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        if (mDataManager.isMyServiceRunning(SenserSmsService.class)) {
+            mStart.setEnabled(false);
+        } else {
+            mStart.setEnabled(true);
         }
     }
 }
