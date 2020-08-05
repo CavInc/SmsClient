@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -67,6 +68,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     // запуск сервиса
     public void onStartService(View v){
+        int workCount = mDataManager.getDB().getNoWorkCountPhone();
+        if (workCount == 0) {
+            Toast.makeText(getActivity(),"Нет не обработанных телефонов",Toast.LENGTH_LONG).show();
+            return;
+        }
         //mDataManager.getDB().deleteAllQuery();
         Intent intent = new Intent(getActivity(), SenserSmsService.class);
         // тодо тут надо добавить прверку на версию

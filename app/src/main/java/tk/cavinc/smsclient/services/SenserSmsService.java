@@ -245,7 +245,8 @@ public class SenserSmsService extends Service {
                 query += 1;
                 if (query>coutPhone) {
                     // останавливаемся
-
+                    runing = false;
+                    stopSelf();
                 }
                 mDataManager.getPrefManager().setCountQuery(query);
             }

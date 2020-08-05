@@ -344,6 +344,23 @@ public class DBConnect {
         return ret;
     }
 
+    // проверить есть ли не обработанные телефоны
+    public int getNoWorkCountPhone(){
+        int count = 0;
+        open();
+        Cursor cursor = database.rawQuery("select count(id) as ci from "+DBHelper.SEND_PHONE+" where status = 0",null);
+        while (cursor.moveToNext()){
+            count = cursor.getInt(0);
+        }
+        close();
+        return count;
+    }
+
+    // скинули статус обработаных телефонов
+    public void clearWorkedPhone(){
+
+    }
+
     // записать данные о отправки сообщения
     public void addHistory(String phone,String msg){
         open();
