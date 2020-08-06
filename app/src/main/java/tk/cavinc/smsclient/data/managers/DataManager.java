@@ -112,6 +112,7 @@ public class DataManager {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        if (defaultSimm != -1) return defaultSimm;
 
         Method method_getSmsDefaultSim;
         int smsDefaultSim = -1;

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import tk.cavinc.smsclient.utils.App;
  */
 
 public class MainFragment extends Fragment implements View.OnClickListener,Observer {
+    private static final String TAG = "MAF";
     private DataManager mDataManager;
 
     private Button mStart;
@@ -87,7 +89,22 @@ public class MainFragment extends Fragment implements View.OnClickListener,Obser
             //TODO включаем кнопки для симок
             mSimSelect.setVisibility(View.VISIBLE);
             mSim1.setText(mDataManager.getSimDataModel().get(0).getName());
+            mSim1.setTag(mDataManager.getSimDataModel().get(0).getSimSlotIndex());
             mSim2.setText(mDataManager.getSimDataModel().get(1).getName());
+            mSim2.setTag(mDataManager.getSimDataModel().get(1).getSimSlotIndex());
+            //Log.d(TAG,"DEFOLT SLOT SIM "+mDataManager.getDefaultSimmm(getActivity()));
+
+            int id = mDataManager.getPrefManager().getSimSelect();
+            switch (id){
+                case 0:
+                    mSim1.setSelected(true);
+                    break;
+                case 1:
+                    mSim2.setSelected(true);
+                    break;
+                default:
+                    mSim1.setSelected(true);
+            }
         }
     }
 
@@ -154,9 +171,14 @@ public class MainFragment extends Fragment implements View.OnClickListener,Obser
                 onPauseService(view);
                 break;
             case R.id.sim1:
-                mSim1.setActivated(true);
+                mSim1.setSelected(true);
+                mSim2.setSelected(false);
+                mDataManager.getPrefManager().setSimSelect((Integer) mSim1.getTag());
                 break;
             case R.id.sim2:
+                mSim2.setSelected(true);
+                mSim1.setSelected(false);
+                mDataManager.getPrefManager().setSimSelect((Integer) mSim2.getTag());
                 break;
         }
     }

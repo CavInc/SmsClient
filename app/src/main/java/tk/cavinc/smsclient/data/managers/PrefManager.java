@@ -16,6 +16,7 @@ public class PrefManager {
     private static final String PERIOD_TO = "PT";
     private static final String LAST_SEND_PHONE = "LAST_SEND_PHONE";
     private static final String SERVER_PAUSE = "SERVER_PAUSE";
+    private static final String SELECT_SIM = "SELECT_SIM";
     private SharedPreferences mSharedPreferences;
 
     public PrefManager(){
@@ -105,5 +106,17 @@ public class PrefManager {
         editor.putInt(LAST_SEND_PHONE,id);
         editor.apply();
     }
+
+    // выбранная сим карта
+    public int getSimSelect(){
+        return mSharedPreferences.getInt(SELECT_SIM,-1);
+    }
+
+    public void setSimSelect(int index){
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putInt(SELECT_SIM,index);
+        editor.apply();
+    }
+
 
 }
