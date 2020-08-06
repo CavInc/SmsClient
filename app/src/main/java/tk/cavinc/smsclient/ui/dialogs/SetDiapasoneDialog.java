@@ -45,6 +45,9 @@ public class SetDiapasoneDialog extends DialogFragment {
                 .setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        if (Integer.parseInt(mPeriodTo.getText().toString()) < Integer.parseInt(mPeriodFrom.getText().toString())) {
+                            return;
+                        }
                         mDataManager.getPrefManager().setPeriodFrom(Integer.parseInt(mPeriodFrom.getText().toString()));
                         mDataManager.getPrefManager().setPeriodTo(Integer.parseInt(mPeriodTo.getText().toString()));
                     }
