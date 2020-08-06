@@ -5,9 +5,9 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "tk.cavinc.smsclient"
-        minSdkVersion 18
+        minSdkVersion 22
         targetSdkVersion 27
-        versionCode 4
+        versionCode 5
         versionName "1.0.0"
         resConfigs "en", "ru"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

@@ -1,14 +1,19 @@
 package tk.cavinc.smsclient.services;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.PersistableBundle;
+import android.service.restrictions.RestrictionsReceiver;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsManager;
@@ -41,7 +46,7 @@ public class SenserSmsService extends Service {
     private DataManager mDataManager;
     private boolean runing = true;
 
-    String DELIVER_SMS_FLAG = "DELIVER_SMS";
+    String DELIVERED = "SMS_DELIVERED";
 
     private ArrayList<SmsMessageModel> smsMessage;
     private ArrayList<ShortCutMsgModel> shortCutMsg;
@@ -70,6 +75,12 @@ public class SenserSmsService extends Service {
 
     private void work(){
         Log.d(TAG,"START SERICE");
+        /*
+        //---when the SMS has been delivered---
+        registerReceiver(mBroadcastReceiver, new IntentFilter(DELIVERED));
+        final PendingIntent deliveredPI = PendingIntent.getBroadcast(SenserSmsService.this, 0,
+                new Intent(DELIVERED), 0);
+        */
 
         new Thread(new Runnable() {
             @Override
@@ -131,11 +142,21 @@ public class SenserSmsService extends Service {
 
 
                     if (phone != null) {
-                        try {
-                            smsManager.sendTextMessage(phone, null, msgIn, null, null);
-                        } catch (Exception e){
-                            Toast.makeText(mDataManager.getContext(),e.getLocalizedMessage(),Toast.LENGTH_LONG).show();
+
+                        if (mDataManager.getPrefManager().getSimSelect() != -1) {
+                            boolean res = mDataManager.sendSMS2(mDataManager.getContext(),
+                                    mDataManager.getPrefManager().getSimSelect(), phone,
+                                    null, msgIn, null, null);
+
+                        } else {
+                            try {
+                                //smsManager.sendTextMessage(phone, null, msgIn, null, deliveredPI);
+                                smsManager.sendTextMessage(phone, null, msgIn, null, null);
+                            } catch (Exception e) {
+                                Toast.makeText(mDataManager.getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                            }
                         }
+
                         mDataManager.getDB().addHistory(phone,msgIn);
                         App.getChangeHistoryManager().setChange(msgIn);
                     }
@@ -146,13 +167,36 @@ public class SenserSmsService extends Service {
         }).start();
     }
 
+    BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (getResultCode())
+            {
+                case Activity.RESULT_OK:
+                    Toast.makeText(getBaseContext(), "SMS delivered",
+                            Toast.LENGTH_SHORT).show();
+                    Log.d(TAG,"SMS deliered");
+                    break;
+                case Activity.RESULT_CANCELED:
+                    Toast.makeText(getBaseContext(), "SMS not delivered",
+                            Toast.LENGTH_SHORT).show();
+                    Log.d(TAG,"SMS not delivered");
+                    break;
+            }
+        }
+    };
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG,"STOP SERVICE");
         runing = false;
+        //unregisterReceiver(mBroadcastReceiver);
         stopSelf();
     }
+
+
 
     public void sendNotification(String Ticker,String Title,String Text) {
         Intent notificationIntent = new Intent(this, MainActivity.class);
