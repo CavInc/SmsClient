@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +12,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
 import tk.cavinc.smsclient.R;
 import tk.cavinc.smsclient.data.managers.DataManager;
-import tk.cavinc.smsclient.data.models.ShortCutMsgModel;
 import tk.cavinc.smsclient.services.SenserSmsService;
 import tk.cavinc.smsclient.utils.App;
-import tk.cavinc.smsclient.utils.Utils;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by cav on 25.07.20.
@@ -35,6 +29,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Obser
 
     private Button mStart;
     private Button mStop;
+    private Button mPause;
     private LinearLayout mSimSelect;
 
     private Button mSim1;
@@ -57,9 +52,16 @@ public class MainFragment extends Fragment implements View.OnClickListener,Obser
 
         mStart = rootView.findViewById(R.id.main_start);
         mStop = rootView.findViewById(R.id.main_stop);
+        mPause = rootView.findViewById(R.id.main_pause);
 
         mStart.setOnClickListener(this);
         mStop.setOnClickListener(this);
+        mPause.setOnClickListener(this);
+
+        if (mDataManager.getPrefManager().getServicePause()) {
+            mStop.setEnabled(false);
+            mPause.setEnabled(false);
+        }
 
         if (mDataManager.isMyServiceRunning(SenserSmsService.class)) {
             mStart.setEnabled(false);
@@ -74,14 +76,6 @@ public class MainFragment extends Fragment implements View.OnClickListener,Obser
         mSim1.setOnClickListener(this);
         mSim2.setOnClickListener(this);
 
-        if (mDataManager.getSimDataModel().size() > 1) {
-            //TODO включаем кнопки для симок
-            mSimSelect.setVisibility(View.VISIBLE);
-            mSim1.setText(mDataManager.getSimDataModel().get(0).getName());
-            mSim2.setText(mDataManager.getSimDataModel().get(1).getName());
-        }
-
-
         return rootView;
     }
 
@@ -89,6 +83,12 @@ public class MainFragment extends Fragment implements View.OnClickListener,Obser
     public void onResume() {
         super.onResume();
         App.getStopServiceObserver().addObserver(this);
+        if (mDataManager.getSimDataModel().size() > 1) {
+            //TODO включаем кнопки для симок
+            mSimSelect.setVisibility(View.VISIBLE);
+            mSim1.setText(mDataManager.getSimDataModel().get(0).getName());
+            mSim2.setText(mDataManager.getSimDataModel().get(1).getName());
+        }
     }
 
     @Override
@@ -99,11 +99,22 @@ public class MainFragment extends Fragment implements View.OnClickListener,Obser
 
     // пауза
     public void onPauseService(View v) {
-
+        mDataManager.getPrefManager().setServicePause(true);
+        mPause.setEnabled(false);
+        mStop.setEnabled(false);
+        mStart.setEnabled(true);
+        Intent intent = new Intent(getActivity(),SenserSmsService.class);
+        getActivity().stopService(intent);
     }
 
     // запуск сервиса
     public void onStartService(View v){
+        if (mDataManager.getPrefManager().getServicePause()) {
+            mPause.setEnabled(true);
+            mStop.setEnabled(true);
+            mDataManager.getPrefManager().setServicePause(false);
+        }
+
         int workCount = mDataManager.getDB().getNoWorkCountPhone();
         if (workCount == 0) {
             Toast.makeText(getActivity(),"Нет не обработанных телефонов",Toast.LENGTH_LONG).show();
@@ -124,6 +135,8 @@ public class MainFragment extends Fragment implements View.OnClickListener,Obser
     public void onStopService(View v){
         Intent intent = new Intent(getActivity(),SenserSmsService.class);
         getActivity().stopService(intent);
+        mDataManager.getDB().clearWorkedPhone();
+        mDataManager.getPrefManager().setServicePause(false);
     }
 
     @Override
@@ -150,10 +163,16 @@ public class MainFragment extends Fragment implements View.OnClickListener,Obser
 
     @Override
     public void update(Observable observable, Object o) {
-        if (mDataManager.isMyServiceRunning(SenserSmsService.class)) {
-            mStart.setEnabled(false);
-        } else {
-            mStart.setEnabled(true);
+        /*
+        while (mDataManager.isMyServiceRunning(SenserSmsService.class)){
+
         }
+        */
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mStart.setEnabled(true);
+            }
+        });
     }
 }

@@ -198,6 +198,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             List<SubscriptionInfo> activeSubscriptionInfoList = subscriptionManager.getActiveSubscriptionInfoList();
             int simCount = activeSubscriptionInfoList.size();
             Log.d("MainActivity: ","simCount:" +simCount);
+            mDataManager.getSimDataModel().clear();
             for (SubscriptionInfo subscriptionInfo : activeSubscriptionInfoList) {
                 Log.d("MainActivity: ","iccId :"+ subscriptionInfo.getIccId()+" , name : "+ subscriptionInfo.getDisplayName());
                 Log.d(TAG,"SIM SLOT IDNDEX : "+subscriptionInfo.getSimSlotIndex());
@@ -205,14 +206,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         subscriptionInfo.getDisplayName().toString()));
             }
         }
-
-        /*
-        SimManager simManager = new SimManager(this);
-        if (simManager.isSupported()){
-            Log.d(TAG,"DUO Test ");
-        }
-        Log.d(TAG,"SIM MODE :"+simManager.getSimMode());
-        */
     }
 
 

@@ -370,7 +370,11 @@ public class DBConnect {
 
     // скинули статус обработаных телефонов
     public void clearWorkedPhone(){
-
+        open();
+        ContentValues values = new ContentValues();
+        values.put("status",0);
+        database.update(DBHelper.SEND_PHONE,values,null,null);
+        close();
     }
 
     // записать данные о отправки сообщения

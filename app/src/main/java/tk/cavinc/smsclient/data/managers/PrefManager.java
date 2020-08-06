@@ -1,7 +1,6 @@
 package tk.cavinc.smsclient.data.managers;
 
 import android.content.SharedPreferences;
-import android.widget.EditText;
 
 import tk.cavinc.smsclient.utils.App;
 
@@ -16,14 +15,22 @@ public class PrefManager {
     private static final String PERIOD_FROM = "PF";
     private static final String PERIOD_TO = "PT";
     private static final String LAST_SEND_PHONE = "LAST_SEND_PHONE";
+    private static final String SERVER_PAUSE = "SERVER_PAUSE";
     private SharedPreferences mSharedPreferences;
 
     public PrefManager(){
         mSharedPreferences = App.getSharedPreferences();
     }
 
-    public boolean getServiceStatus(){
-        return false;
+    // статус сервиса
+    public boolean getServicePause(){
+        return mSharedPreferences.getBoolean(SERVER_PAUSE,false);
+    }
+
+    public void setServicePause(boolean status){
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putBoolean(SERVER_PAUSE,status);
+        editor.apply();
     }
 
     public boolean getMsgRnd(){
@@ -98,4 +105,5 @@ public class PrefManager {
         editor.putInt(LAST_SEND_PHONE,id);
         editor.apply();
     }
+
 }
