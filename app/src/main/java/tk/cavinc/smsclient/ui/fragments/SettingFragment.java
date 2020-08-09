@@ -3,8 +3,9 @@ package tk.cavinc.smsclient.ui.fragments;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.support.annotation.Nullable;
 
+
+import androidx.annotation.Nullable;
 import tk.cavinc.smsclient.R;
 import tk.cavinc.smsclient.ui.dialogs.SetDiapasoneDialog;
 

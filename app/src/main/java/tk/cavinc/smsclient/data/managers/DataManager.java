@@ -1,12 +1,13 @@
 package tk.cavinc.smsclient.data.managers;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
-import android.support.annotation.RequiresApi;
+
 import android.telephony.SmsManager;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
@@ -18,6 +19,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.RequiresApi;
 import tk.cavinc.smsclient.data.database.DBConnect;
 import tk.cavinc.smsclient.data.models.SimDataModel;
 import tk.cavinc.smsclient.utils.App;
@@ -169,6 +171,7 @@ public class DataManager {
     }
 
     //https://coderoad.ru/23990001/%D0%9A%D0%B0%D0%BA-%D0%BE%D1%82%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-sms-%D0%B2-android-%D0%B2-%D0%B4%D0%B2%D0%BE%D0%B9%D0%BD%D0%BE%D0%B9-SIM-%D0%BA%D0%B0%D1%80%D1%82%D0%B5
+    @SuppressLint("MissingPermission")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     public  boolean sendSMS2(Context context, int simID, String toNum, String centerNum, String smsText, PendingIntent sentIntent, PendingIntent deliveryIntent) {
         SmsManager smsMan = SmsManager.getDefault();

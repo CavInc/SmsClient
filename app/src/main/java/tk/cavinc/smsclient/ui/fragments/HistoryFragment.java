@@ -7,8 +7,7 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +22,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import tk.cavinc.smsclient.R;
 import tk.cavinc.smsclient.data.database.DBConnect;
 import tk.cavinc.smsclient.data.managers.DataManager;

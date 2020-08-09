@@ -9,21 +9,16 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Build;
 import android.os.IBinder;
-import android.os.PersistableBundle;
-import android.service.restrictions.RestrictionsReceiver;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsManager;
 import android.util.Log;
-import android.util.TimeUtils;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.Nullable;
 import tk.cavinc.smsclient.data.managers.DataManager;
 import tk.cavinc.smsclient.data.models.PhoneListModel;
 import tk.cavinc.smsclient.data.models.ShortCutMsgModel;

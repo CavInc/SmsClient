@@ -31,6 +31,7 @@
             </intent-filter>
         </activity>
 
+        <!-- android:foregroundServiceType="phoneCall" -->
         <service android:name=".services.SenserSmsService"
             android:enabled="true"
             android:exported="true"/>

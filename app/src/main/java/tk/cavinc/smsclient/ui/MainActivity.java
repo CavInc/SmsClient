@@ -1,36 +1,31 @@
 package tk.cavinc.smsclient.ui;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import android.os.Bundle;
-import android.telephony.CellInfo;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
+
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
+import androidx.drawerlayout.widget.DrawerLayout;
 import tk.cavinc.smsclient.R;
 import tk.cavinc.smsclient.data.managers.DataManager;
-import tk.cavinc.smsclient.data.managers.SimManager;
 import tk.cavinc.smsclient.data.models.SimDataModel;
-import tk.cavinc.smsclient.services.SenserSmsService;
 import tk.cavinc.smsclient.ui.fragments.HistoryFragment;
 import tk.cavinc.smsclient.ui.fragments.MainFragment;
 import tk.cavinc.smsclient.ui.fragments.MessageTxtFragment;
@@ -195,7 +190,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SubscriptionManager subscriptionManager = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
             subscriptionManager = SubscriptionManager.from(getApplicationContext());
-            List<SubscriptionInfo> activeSubscriptionInfoList = subscriptionManager.getActiveSubscriptionInfoList();
+            @SuppressLint("MissingPermission") List<SubscriptionInfo> activeSubscriptionInfoList
+                    = subscriptionManager.getActiveSubscriptionInfoList();
             int simCount = activeSubscriptionInfoList.size();
             Log.d("MainActivity: ","simCount:" +simCount);
             mDataManager.getSimDataModel().clear();
