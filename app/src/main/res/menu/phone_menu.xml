@@ -6,4 +6,7 @@
         android:id="@+id/phone_load"
         android:title="Загрузка списка"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/phone_delete"
+        android:title="Очистить весь список"/>
 </menu>

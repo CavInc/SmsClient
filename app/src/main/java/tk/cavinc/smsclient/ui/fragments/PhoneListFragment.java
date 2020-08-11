@@ -88,6 +88,10 @@ public class PhoneListFragment extends Fragment implements View.OnClickListener,
             case R.id.phone_load:
                 loadPhoneList();
                 return true;
+            case R.id.phone_delete:
+                mDataManager.getDB().deletePhoneAll();
+                updateUI();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
