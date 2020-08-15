@@ -405,6 +405,21 @@ public class DBConnect {
         close();
     }
 
+    // количество отправленных сообщений
+    public long getHistoryCount(){
+        long rec = 0;
+        if (! database.isOpen()) {
+            open();
+        }
+        String sql = "select count(_id) as ci from "+DBHelper.HISTORY_SEND;
+        Cursor cursor = database.rawQuery(sql,null);
+        while (cursor.moveToNext()) {
+            rec = cursor.getLong(0);
+        }
+        //close();
+        return rec;
+    }
+
 
     // Добавить запись в очередь
     public void addQuery(int idPhone){

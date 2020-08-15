@@ -7,10 +7,11 @@ android {
         applicationId "tk.cavinc.smsclient"
         minSdkVersion 22
         targetSdkVersion 29
-        versionCode 7
-        versionName "1.0.2"
+        versionCode 8
+        versionName "1.0.3"
         resConfigs "en", "ru"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        project.ext.set("archivesBaseName", "SMSClient-" + defaultConfig.versionName);
     }
     buildTypes {
         release {

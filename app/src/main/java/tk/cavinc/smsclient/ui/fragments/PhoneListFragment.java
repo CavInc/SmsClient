@@ -1,5 +1,7 @@
 package tk.cavinc.smsclient.ui.fragments;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
@@ -26,10 +28,12 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.documentfile.provider.DocumentFile;
 import tk.cavinc.smsclient.R;
 import tk.cavinc.smsclient.data.managers.DataManager;
 import tk.cavinc.smsclient.data.models.PhoneListModel;
+import tk.cavinc.smsclient.services.SenserSmsService;
 import tk.cavinc.smsclient.ui.adapters.PhoneAdapter;
 import tk.cavinc.smsclient.ui.dialogs.EditDeleteDialog;
 import tk.cavinc.smsclient.ui.dialogs.PhoneDialog;
@@ -103,9 +107,16 @@ public class PhoneListFragment extends Fragment implements View.OnClickListener,
         updateUI();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(null);
+    }
+
     private void updateUI(){
         ArrayList<PhoneListModel> data = mDataManager.getDB().getPhone();
         setPhoneCount();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle("телефонов : "+data.size());
         if (mAdapter == null) {
             mAdapter = new PhoneAdapter(getActivity(),R.layout.phone_item,data);
             mListView.setAdapter(mAdapter);
@@ -115,6 +126,17 @@ public class PhoneListFragment extends Fragment implements View.OnClickListener,
     }
 
     private void loadPhoneList(){
+        // проверим запущен ли сервис и если да отказ от загрузки
+        if (mDataManager.isMyServiceRunning(SenserSmsService.class)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Внимание !")
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .setMessage("Остановите оправку сообщений перед загрузкой нового списка телефонов")
+                    .setPositiveButton(R.string.dialog_close,null);
+            builder.show();
+            return;
+        }
+
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/plain");

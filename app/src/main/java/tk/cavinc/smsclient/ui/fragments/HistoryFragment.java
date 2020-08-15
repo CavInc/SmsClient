@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import tk.cavinc.smsclient.R;
 import tk.cavinc.smsclient.data.database.DBConnect;
 import tk.cavinc.smsclient.data.managers.DataManager;
@@ -86,12 +87,19 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
     public void onResume() {
         super.onResume();
         App.getChangeHistoryManager().addObserver(this);
+        setTitleCount();
     }
 
     @Override
     public void onStop() {
         super.onStop();
         App.getChangeHistoryManager().deleteObserver(this);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(null);
+    }
+
+    private void setTitleCount(){
+        //long count = mDataManager.getDB().getHistoryCount();
+        //((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle("отправлено сообщений : "+count);
     }
 
     @NonNull
@@ -108,6 +116,8 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
         //данные обновились и нужно заново отобразить список.
         mAdapter.swapCursor(data);
         Log.d(TAG,"Получили");
+        int count = data.getCount();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle("отправлено сообщений : "+count);
     }
 
     @Override
@@ -120,6 +130,7 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public void update(Observable observable, Object o) {
         getLoaderManager().getLoader(0).forceLoad();
+        setTitleCount();
     }
 
     static class MyCursorLoader extends CursorLoader {
