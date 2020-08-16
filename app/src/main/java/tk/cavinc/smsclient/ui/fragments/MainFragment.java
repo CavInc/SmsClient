@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Observable;
@@ -28,6 +29,9 @@ import tk.cavinc.smsclient.utils.App;
 
 public class MainFragment extends Fragment implements View.OnClickListener,Observer {
     private static final String TAG = "MAF";
+    private static final String SENTEND_MSG = "Идет рассылка";
+    private static final String STOP_MSG = "Рассылка не запущена";
+    private static final String PAUSE_MSG = "Рассылка на паузе";
     private DataManager mDataManager;
 
     private Button mStart;
@@ -37,6 +41,8 @@ public class MainFragment extends Fragment implements View.OnClickListener,Obser
 
     private Button mSim1;
     private Button mSim2;
+
+    private TextView mStatus;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,15 +67,20 @@ public class MainFragment extends Fragment implements View.OnClickListener,Obser
         mStop.setOnClickListener(this);
         mPause.setOnClickListener(this);
 
+        mStatus = rootView.findViewById(R.id.main_status);
+
         if (mDataManager.getPrefManager().getServicePause()) {
             mStop.setEnabled(false);
             mPause.setEnabled(false);
+            mStatus.setText(PAUSE_MSG);
         }
 
         if (mDataManager.isMyServiceRunning(SenserSmsService.class)) {
             mStart.setEnabled(false);
+            mStatus.setText(SENTEND_MSG);
         } else {
             mStart.setEnabled(true);
+            mStatus.setText(STOP_MSG);
         }
 
         mSimSelect = rootView.findViewById(R.id.select_sim);
@@ -121,6 +132,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Obser
         mPause.setEnabled(false);
         mStop.setEnabled(false);
         mStart.setEnabled(true);
+        mStatus.setText(PAUSE_MSG);
         Intent intent = new Intent(getActivity(),SenserSmsService.class);
         getActivity().stopService(intent);
     }
@@ -147,6 +159,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Obser
         } else {
             getActivity().startService(intent);
         }
+        mStatus.setText(SENTEND_MSG);
     }
 
     // остановка сервиса
@@ -155,6 +168,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Obser
         getActivity().stopService(intent);
         mDataManager.getDB().clearWorkedPhone();
         mDataManager.getPrefManager().setServicePause(false);
+        mStatus.setText(STOP_MSG);
     }
 
     @Override

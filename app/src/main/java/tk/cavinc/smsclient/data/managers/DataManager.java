@@ -79,6 +79,25 @@ public class DataManager {
         return path.getPath();
     }
 
+    // локальные файлы приложения на SD
+    public String getPrivateFilesApp(){
+        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+            return null;
+        File path = new File(mContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS),"SMSClient");
+        if (! path.exists()) {
+            if (!path.mkdirs()){
+                return null;
+            }
+        }
+        return path.getPath();
+    }
+
+    // возвращаем путь в хранилищу приложения
+    public String getAppStorage(){
+       File path = mContext.getFilesDir();
+       return path.getPath();
+    }
+
 
     /* Checks if external storage is available for read and write */
     public boolean isExternalStorageWritable() {

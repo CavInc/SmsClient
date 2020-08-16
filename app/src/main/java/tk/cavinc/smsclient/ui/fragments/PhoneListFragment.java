@@ -162,7 +162,14 @@ public class PhoneListFragment extends Fragment implements View.OnClickListener,
         DocumentFile file = DocumentFile.fromSingleUri(getActivity(),uri);
         Log.d(TAG,file.getName());
         try {
-            File fOut = new File(mDataManager.getStorageAppPath(),file.getName());
+            //String path = mDataManager.getStorageAppPath();
+            //String path = mDataManager.getAppStorage();
+            String path = mDataManager.getPrivateFilesApp();
+
+            if (path == null) {
+                Log.d(TAG,"PAT : хцй");
+            }
+            File fOut = new File(path,file.getName());
 
             FileInputStream input = (FileInputStream) getActivity().getContentResolver().openInputStream(file.getUri());
             FileOutputStream output = new FileOutputStream(fOut);

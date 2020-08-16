@@ -32,6 +32,17 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/main_status"
+        tools:text="Статус"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/select_sim"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <Button
         android:id="@+id/main_start"
         android:text="Старт"
