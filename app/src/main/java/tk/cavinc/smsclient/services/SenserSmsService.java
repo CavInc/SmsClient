@@ -134,8 +134,6 @@ public class SenserSmsService extends Service {
                     //String phone = getPhone2();
                     Log.d(TAG,"PHONE :"+phone);
 
-
-
                     if (phone != null) {
 
                         if (mDataManager.getPrefManager().getSimSelect() != -1) {

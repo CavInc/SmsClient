@@ -192,7 +192,8 @@ public class DataManager {
     //https://coderoad.ru/23990001/%D0%9A%D0%B0%D0%BA-%D0%BE%D1%82%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-sms-%D0%B2-android-%D0%B2-%D0%B4%D0%B2%D0%BE%D0%B9%D0%BD%D0%BE%D0%B9-SIM-%D0%BA%D0%B0%D1%80%D1%82%D0%B5
     @SuppressLint("MissingPermission")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
-    public  boolean sendSMS2(Context context, int simID, String toNum, String centerNum, String smsText, PendingIntent sentIntent, PendingIntent deliveryIntent) {
+    public  boolean sendSMS2(Context context, int simID, String toNum, String centerNum,
+                             String smsText, PendingIntent sentIntent, PendingIntent deliveryIntent) {
         SmsManager smsMan = SmsManager.getDefault();
         int[] param;
         Method method = null;
@@ -201,7 +202,8 @@ public class DataManager {
             if (localSubscriptionManager.getActiveSubscriptionInfoCount() > 1) {
                 List localList = localSubscriptionManager.getActiveSubscriptionInfoList();
                 SubscriptionInfo simInfo = (SubscriptionInfo) localList.get(simID);
-                SmsManager.getSmsManagerForSubscriptionId(simInfo.getSubscriptionId()).sendTextMessage(toNum, null, smsText, null, null);
+                SmsManager.getSmsManagerForSubscriptionId(simInfo.getSubscriptionId())
+                        .sendTextMessage(toNum, null, smsText, null, null);
             }
             return true;
         } catch (Exception e) {

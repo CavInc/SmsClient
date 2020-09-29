@@ -96,6 +96,10 @@ public class PhoneListFragment extends Fragment implements View.OnClickListener,
                 mDataManager.getDB().deletePhoneAll();
                 updateUI();
                 return true;
+            case R.id.phone_delete_double:
+                mDataManager.getDB().deleteDoublePhone();
+                updateUI();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

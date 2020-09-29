@@ -7,6 +7,9 @@
         android:title="Загрузка списка"
         app:showAsAction="ifRoom"/>
     <item
+        android:id="@+id/phone_delete_double"
+        android:title="Убрать дубли"/>
+    <item
         android:id="@+id/phone_delete"
         android:title="Очистить весь список"/>
 </menu>

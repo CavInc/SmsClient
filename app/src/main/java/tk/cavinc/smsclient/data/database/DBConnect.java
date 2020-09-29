@@ -450,5 +450,21 @@ public class DBConnect {
         close();
     }
 
+    // убрать дубли телефонов
+    public void deleteDoublePhone(){
+        /*
+        String sql = "select sp.id,  sp.phone from send_phone sp "+
+                "join  (select phone,count(phone) as ci from send_phone "+
+                "group by phone) as a on sp.phone=a.phone and a.ci>1 order by sp.phone";
+
+         */
+
+        String sql = "delete from send_phone\n" +
+                "where id not in\n" +
+                "(select id from send_phone group by phone)";
+        open();
+        database.execSQL(sql);
+        close();
+    }
 
 }
